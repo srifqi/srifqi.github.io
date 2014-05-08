@@ -1,11 +1,11 @@
 <!doctype html>
 <html><head>
-		<title>Drive A Car (2D) (1066 bytes script)</title>
+		<title>Drive A Car (2D) (1044 bytes script)</title>
 		<meta charset="utf-8" />
 	</head>
 	<body style="margin:0;">
 		<div>
-			Drive A Car (2D) (1066 bytes script)<br/>
+			Drive A Car (2D) (1044 bytes script)<br/>
 			Use arrow to navigate left or right<br/>
 			<i>or touch left side or right side on screen</i>
 		</div>
@@ -17,6 +17,6 @@
 			document.body.clientWidth;
 		</script>
 		<script>
-var f=50/3,g=t=y=0,j=k=1,m=[0,0,0,0,0],h=500,w=800,p=w/8,o=w/4,r=h/5,e=250;for(n in a)a[n[0]+n[n.length>>1]]=a[n];setInterval(function(){if(j<1){return;}g++;function z(n){a.fillStyle='#'+n;}if(t>=e){t-=e;y=(y>0)?0:1;m[4]=m[3];m[3]=m[2];m[2]=m[1];m[1]=m[0];m[0]=(y<1?Math.random()*3+.5|0:0);if(m[4]===k){j=0;z('f00');a.font="90px sans-serif";a.fT('crashed',w/3,h/2);z('000');a.font="20px sans-serif";a.fT('refresh for new game',w/3,h/3*2);return;}}t+=f;z('0f0');a.fR(0,0,w,h);z('a22');a.fR(p,0,w/4*3,h);z('a62');a.fR(p+(k-1)*o,4*r,o,r);z('fa0');for(var i=0;i<5;i++){(m[i]===0)?(z('fa0')):(a.fR(p+(m[i]-1)*o,(i-1+t/e)*r,o,r));}z('000');a.font="12px sans-serif";a.fT("score:"+g,w/32,h/8);},f);window.onkeyup=function(e){e=e.keyCode;switch(e){case 37:s(-1);break;case 39:s(1);break;}};function s(n){if(n>0&&k<3){k++;}if(n<0&&k>1){k--;}}function v(x){var u=window.innerWidth,q=u*.3;if(x<q){s(-1);}else if(x>u-q){s(1);}}document.addEventListener("touchstart",function(e){v(e.touches[0].clientX);},false);document.addEventListener("click",function(e){v(e.clientX);},false);
+var f=50/3,g=t=y=0,j=k=1,m=[0,0,0,0,0],h=500,w=800,p=w/8,o=w/4,r=h/5,e=250;for(n in a)a[n[0]+n[n.length>>1]]=a[n];setInterval(function(){if(j<1){return;}g++;with(a){function z(n){a.fillStyle='#'+n;}if(t>=e){t-=e;y=(y>0)?0:1;for(var A=4;A>0;)m[A]=m[--A];m[0]=(y<1?Math.random()*3+.5|0:0);if(m[4]===k){j=0;z('f00');font="90px sans-serif";fT('crashed',w/3,h/2);z('000');font="20px sans-serif";fT('refresh for new game',w/3,h/3*2);return;}}t+=f;z('0f0');fR(0,0,w,h);z('a22');fR(p,0,w/4*3,h);z('a62');fR(p+(k-1)*o,4*r,o,r);z('fa0');for(var i=0;i<5;i++){(m[i]===0)?(z('fa0')):(fR(p+(m[i]-1)*o,(i-1+t/e)*r,o,r));}z('000');font="12px sans-serif";fT("score:"+g,w/32,h/8);}},f);window.onkeyup=function(e){e=e.keyCode;switch(e){case 37:s(-1);break;case 39:s(1);break;}};function s(n){if(n>0&&k<3){k++;}if(n<0&&k>1){k--;}}function v(x){var u=window.innerWidth,q=u*.3;if(x<q){s(-1);}else if(x>u-q){s(1);}}document.addEventListener("touchstart",function(e){v(e.touches[0].clientX);},false);document.addEventListener("click",function(e){v(e.clientX);},false);
 		</script>
 </body></html>
