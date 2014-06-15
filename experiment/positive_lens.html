@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head>
+		<title>Positive Lens (1398 bytes script)</title>
+		<meta charset="utf-8" />
+	</head>
+	<body style="margin:0;">
+		<div>
+			Positive Lens (1398 bytes (1.37KB) script)<br/>
+			Use arrow to change position (left or right) and height (up or down)
+		</div>
+		<canvas id="c"></canvas>
+		<script>
+			var b = document.body;
+			var c = document.getElementsByTagName('canvas')[0];
+			var a = c.getContext('2d');
+			document.body.clientWidth;
+		</script>
+	    <script>
+function G(a,b){for(a=a||1,b=b||1,0>a&&(a=-a),0>b&&(b=-b),b>a&&(a=[b,b=a][0]);;){if(a%=b,0==a)return b;if(b%=a,0==b)return a}}function L(a,b){return a/G(a,b)*b}function k(a,b,c,d){var e=L(b,d),f=e/b*a-e/d*c,g=G(e,f);return[f/g,e/g]}for($ in a)a[$[0]+$[$.length>>1]]=a[$];function l(a,b,c,d,e){var f=a*-d+b*c,a=c-a,b=d-b;return(b*e+f)/a}var e=1e3,g=500,i=500,j=250,h=50,s=240,f=120,K=k(1,f,1,s),S=K[1]/K[0],M=Math.abs(S,s),H=h*M;c.width=e;c.height=g;window.onkeydown=function(a){switch(a.keyCode){case 37:i-1>s&&s++;break;case 38:j-1>h&&h++;break;case 39:s>0&&s--;break;case 40:h>0&&h--}d()};function d(){with(K=k(1,f,1,s),S=K[1]/K[0],M=Math.abs(S/s),H=h*M,a)cr(0,0,e,g),strokeStyle="#00f",bn(),me(0,j),le(e,j),so(),bn(),me(i,9),le(i,g),so(),bn(),me(i-3,4),le(i+3,4),so(),bn(),me(i,1),le(i,7),so(),strokeStyle="#f00",bn(),me(i-s,j),le(i-s,j-h),so(),f>s&&setLineDash([4]),bn(),me(i+S,j),le(i+S,j-H*(f>=s?1:-1)),so(),f>s&&setLineDash([0]),strokeStyle="#2af",bn(),me(i-f,j-5),le(i-f,j+5),so(),bn(),me(i+f,j-5),le(i+f,j+5),so(),bn(),me(i-2*f,j-5),le(i-2*f,j+5),so(),bn(),me(i+2*f,j-5),le(i+2*f,j+5),so(),strokeStyle="#282",bn(),me(i-s,j-h),le(i,j-h),le(e,l(i,j-h,i+f,j,e)),so(),(s<=f&&(setLineDash([4]),bn(),me(i,j-h),le(0,l(i,j-h,i+f,j,0)),so(),setLineDash([0]))),bn(),me(i-s,j-h),le(e,l(i-s,j-h,i,j,e)),so(),(s<=f&&(setLineDash([4]),bn(),me(i-s,j-h),le(0,l(i-s,j-h,i,j,0)),so(),setLineDash([0])))}d();
+	    </script>
+	    <script src='../js/nav.js'></script>
+</body></html>
