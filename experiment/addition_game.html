@@ -96,7 +96,6 @@
 				</tr>
 			</tbody>
 		</table>
-		<script src="about:blank"></script>
 		<script>
 var $ = function(id){
 	return document.getElementById(id);
@@ -154,7 +153,9 @@ function get_control(player){
 			total-i<5&&
 			total-i>=0&&
 			p[0]!==i&&
-			p[1]!==total-i
+			p[1]!==total-i&&
+			p[1]!==i&&
+			p[0]!==total-i
 		) {
 			pairs.push([i,total-i]);
 		}
@@ -186,20 +187,20 @@ function update(){
 	d.p1.r.innerHTML = p1[1];
 	d.p1.a1.innerHTML = [
 		"<button class='p1' onclick='set(2,0,"+p1[0]+")' "+
-			(p1[0]===0||turn===1||winner!==false?"disabled":"")+
+			(p1[0]===0||p2[0]===0||turn===1||winner!==false?"disabled":"")+
 		">add "+p1[0]+"</button>",
 		"<br/>",
 		"<button class='p1' onclick='set(2,0,"+p1[1]+")' "+
-			(p1[1]===0||turn===1||winner!==false?"disabled":"")+
+			(p1[1]===0||p2[0]===0||turn===1||winner!==false?"disabled":"")+
 		">add "+p1[1]+"</button>"
 	].join("");
 	d.p1.a2.innerHTML = [
 		"<button class='p1' onclick='set(2,1,"+p1[0]+")' "+
-			(p1[0]===0||turn===1||winner!==false?"disabled":"")+
+			(p1[0]===0||p2[1]===0||turn===1||winner!==false?"disabled":"")+
 		">add "+p1[0]+"</button>",
 		"<br/>",
 		"<button class='p1' onclick='set(2,1,"+p1[1]+")' "+
-			(p1[1]===0||turn===1||winner!==false?"disabled":"")+
+			(p1[1]===0||p2[1]===0||turn===1||winner!==false?"disabled":"")+
 		">add "+p1[1]+"</button>"
 	].join("");
 	d.p1.c.innerHTML = "";
@@ -215,20 +216,20 @@ function update(){
 	d.p2.r.innerHTML = p2[1];
 	d.p2.a1.innerHTML = [
 		"<button class='p2' onclick='set(1,0,"+p2[0]+")' "+
-			(p2[0]===0||turn===0||winner!==false?"disabled":"")+
+			(p2[0]===0||p1[0]===0||turn===0||winner!==false?"disabled":"")+
 		">add "+p2[0]+"</button>",
 		"<br/>",
 		"<button class='p2' onclick='set(1,0,"+p2[1]+")' "+
-			(p2[1]===0||turn===0||winner!==false?"disabled":"")+
+			(p2[1]===0||p1[0]===0||turn===0||winner!==false?"disabled":"")+
 		">add "+p2[1]+"</button>"
 	].join("");
 	d.p2.a2.innerHTML = [
 		"<button class='p2' onclick='set(1,1,"+p2[0]+")' "+
-			(p2[0]===0||turn===0||winner!==false?"disabled":"")+
+			(p2[0]===0||p1[1]===0||turn===0||winner!==false?"disabled":"")+
 		">add "+p2[0]+"</button>",
 		"<br/>",
 		"<button class='p2' onclick='set(1,1,"+p2[1]+")' "+
-			(p2[1]===0||turn===0||winner!==false?"disabled":"")+
+			(p2[1]===0||p1[1]===0||turn===0||winner!==false?"disabled":"")+
 		">add "+p2[1]+"</button>"
 	].join("");
 	d.p2.c.innerHTML = "";
