@@ -8,6 +8,14 @@
 	text-align: center;
 }
 
+#mainmenu {
+	text-align: center;
+}
+
+#mainmenu, #mainmenu * {
+	font-size: 60px;
+}
+
 #game {
 	width: 640px;
 	height: 480px;
@@ -68,7 +76,14 @@
 			Addition Game<br/>
 			Fun and makes you smarter!
 		</div>
-		<table id="game">
+		<noscript>
+			Your browser seems doesn't enable Javascript or not support Javascript
+		</noscript>
+		<div id="mainmenu" style="display:none;">
+			Addition game
+			<button onclick="start()">START</button>
+		</div>
+		<table id="game" style="display:none;">
 			<tbody>
 				<tr>
 					<td><div id="p2_right" class="p2 number"></div></td>
@@ -105,6 +120,8 @@ var p1 = [1,1];
 var p2 = [1,1];
 var turn = 0; //p1's turn
 var d = {
+	mm: $("mainmenu"),
+	g: $("game"),
 	p1: {
 		c: $("p1_control"),
 		r: $("p1_right"),
@@ -172,7 +189,12 @@ function checkwins(){ //check for any wins
 	return false;
 }
 
-window.onload = function(){
+function start(){
+	p1 = [1,1];
+	p2 = [1,1];
+	turn = 0; //p1's turn
+	d.mm.style.display = "none";
+	d.g.style.display = "";
 	log("Ready, Set, Go!");
 	update();
 };
@@ -180,7 +202,11 @@ window.onload = function(){
 function update(){
 	var winner = checkwins();
 	if(winner!==false){
-		log(winner+" wins!");
+		log(
+			winner+" wins!"+
+			"<br/>"+
+			"<button onclick='start()'>Restart</button>"
+		);
 	}
 	//player1
 	d.p1.l.innerHTML = p1[0];
@@ -241,6 +267,10 @@ function update(){
 			">"+c2[i].join("-")+"</button><br/>";
 	}
 }
+
+window.onload = function(){
+	d.mm.style.display = "";
+};
 		</script>
 		<script src='../js/nav.js'></script>
 	</body>
