@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Waterdrop - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Watch every drop of water drops">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+</head>
+<body style="margin:0">
+	<noscript>
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<canvas id="c" width="400" height="400"></canvas>
+	<script>
+var b = document.body;
+var c = document.getElementsByTagName("canvas")[0];
+var a = c.getContext("2d");
+document.body.clientWidth;
+	</script>
+	<script>
+var e=[10,110,210,310],w=h=400,W=H=200,f=0,g=100,h=50/3,i=1000;c.width=c.height=w;for(P in a)a[P[0]+(P[6]||'')+P[P.length-1]]=a[P];setInterval(function(){with(a){if(f>g)f=0;f+=h/i*g;tae(W,H);A=function(C,e){fillStyle='#'+'0DF4DF9DF'.substr(C*3,3);e&&bah(),arc(0,0,e,0,7),cah(),fl();};A(0,w+h);for(var Z=e.length-1;Z>=0;){var r=e[Z--]+f;A(0,r+10);A(1,r+5);A(2,r);A(1,r-5);A(0,r-10)}tae(-W,-H);tae(W,f/g*H|0);A(2,10);tae(-W,-(f/g*H|0))}},h);
+	</script>
+</body>
+</html>

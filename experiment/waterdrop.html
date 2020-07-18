@@ -1,21 +1,54 @@
-<!doctype html>
-<html><head>
-		<title>Waterdrop (444 bytes script)</title>
-		<meta charset="utf-8" />
-	</head>
-	<body style="margin:0;">
-		<div>
-			Waterdrop (444 bytes (0.43KB) script)
-		</div>
-		<canvas id="c" width="400" height="400"></canvas>
-		<script>
-			var b=document.body;
-			var c=document.getElementsByTagName('canvas')[0];
-			var a= c.getContext('2d');
-			document.body.clientWidth;
-		</script>
-		<script>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Waterdrop - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Watch every drop of water drops">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<link rel="stylesheet" href="/main.css">
+</head>
+<body style="border: 0; max-width: 100%;">
+	<header><h1>Waterdrop Experiment</h1></header>
+	<main>
+		<nav>
+			<ul class="left-menu">
+				<li><div><a href="/">Home</a></div></li>
+				<li><div><a href="./">Experiments</a></div><ul>
+					<li><a href="addition_game.html">Addition Game</a></li>
+					<li><a href="negative_lens.html">Negative Lens</a></li>
+					<li><a href="positive_lens.html">Positive Lens</a></li>
+					<li class="active"><a href="waterdrop.html">Waterdrop</a></li>
+					<li><a href="drive_a_car.html">Drive A Car</a></li>
+				</ul></li>
+			</ul>
+		</nav>
+		<section style="max-width: 100%;">
+			<aside>
+				<table>
+					<thead>
+						<tr><th colspan="2">Waterdrop</th></tr>
+					</thead>
+					<tbody>
+						<tr><th>Type</th><td>JS demo</td></tr>
+						<tr><th>Date</th><td><time datetime="2014">2014</time></td></tr>
+						<tr><th>Size</th><td>444 bytes<br>439 bytes <small>(revised)</small></td></tr>
+					</tbody>
+				</table>
+			</aside>
+			<p>This is my attempt to create a demo using less than 1 KB of JavaScript. It was an attempt for JS1K entry.</p>
+			<p>Because of <code>textBaseline</code> property, it conflicts with <code>translate</code> function so the old code doesn't work anymore:</p>
+			<pre>
 var e=[10,110,210,310],w=h=400,W=H=200,f=0,g=100,h=50/3,i=1000;c.width=c.height=w;for(P in a)a[P[0]+P[P.length>>1]+P[P.length-1]]=a[P];setInterval(function(){with(a){if(f>g)f=0;f+=h/i*g;tse(W,H);A=function(C,e){fillStyle='#'+'0DF4DF9DF'.substr(C*3,3);e&&bnh(),arc(0,0,e,0,7),ceh(),fll();};A(0,w+h);for(var Z=e.length-1;Z>=0;){var r=e[Z--]+f;A(0,r+10);A(1,r+5);A(2,r);A(1,r-5);A(0,r-10)}tse(-W,-H);tse(W,f/g*H|0);A(2,10);tse(-W,-(f/g*H|0))}},h);
-		</script>
-		<script src='../js/nav.js'></script>
-</body></html>
+			</pre>
+			<p>Below is the revised code. I changed the hash function to make sure that functions I used don't conflict each other.</p>
+			<pre>
+var e=[10,110,210,310],w=h=400,W=H=200,f=0,g=100,h=50/3,i=1000;c.width=c.height=w;for(P in a)a[P[0]+(P[6]||'')+P[P.length-1]]=a[P];setInterval(function(){with(a){if(f>g)f=0;f+=h/i*g;tae(W,H);A=function(C,e){fillStyle='#'+'0DF4DF9DF'.substr(C*3,3);e&&bah(),arc(0,0,e,0,7),cah(),fl();};A(0,w+h);for(var Z=e.length-1;Z>=0;){var r=e[Z--]+f;A(0,r+10);A(1,r+5);A(2,r);A(1,r-5);A(0,r-10)}tae(-W,-H);tae(W,f/g*H|0);A(2,10);tae(-W,-(f/g*H|0))}},h);
+			</pre>
+			<p><span class="italic">Watch every drop of water drops</span></p>
+			<p><a href="bare/waterdrop.html" target="_blank">open in new window</a></p>
+			<iframe style="width: 404px; height: 404px;" src="bare/waterdrop.html"></iframe>
+		</section>
+	</main>
+</body>
+</html>

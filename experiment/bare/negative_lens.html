@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Negative Lens - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Simulation of a ray of light goes through negative lens">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+</head>
+<body style="margin:0">
+	<noscript>
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<canvas id="c"></canvas>
+	<script>
+var b = document.body;
+var c = document.getElementsByTagName("canvas")[0];
+var a = c.getContext("2d");
+document.body.clientWidth;
+	</script>
+	<script>
+function G(a,b){for(a=a||1,b=b||1,0>a&&(a=-a),0>b&&(b=-b),b>a&&(a=[b,b=a][0]);;){if(a%=b,0==a)return b;if(b%=a,0==b)return a}}function L(a,b){return a/G(a,b)*b}function k(a,b,c,d){var e=L(b,d),f=e/b*a-e/d*c,g=G(e,f);return[f/g,e/g]}for($ in a)a[$[0]+$[$.length>>1]]=a[$];function l(a,b,c,d,e){var f=a*-d+b*c,a=c-a,b=d-b;return(b*e+f)/a}var e=1e3,g=500,i=500,j=250,h=50,s=240,f=-120,K=k(1,f,1,s),S=K[1]/K[0],M=Math.abs(S,s),H=h*M;c.width=e;c.height=g;window.onkeydown=function(a){switch(a.keyCode){case 37:i-1>s&&s++;break;case 38:j-1>h&&h++;break;case 39:s>0&&s--;break;case 40:h>0&&h--}d()};function d(){with(K=k(1,f,1,s),S=K[1]/K[0],M=Math.abs(S/s),H=h*M,a)(A=function(x,y){le(x,y);so();bn();}),cr(0,0,e,g),strokeStyle="#00f",bn(),me(0,j),A(e,j),me(i,9),A(i,g),me(i-3,4),A(i+3,4),strokeStyle="#f00",me(i-s,j),A(i-s,j-h),setLineDash([4]),me(i+S,j),A(i+S,j-H),setLineDash([0]),strokeStyle="#2af",me(i-f,j-5),A(i-f,j+5),me(i+f,j-5),A(i+f,j+5),me(i-2*f,j-5),A(i-2*f,j+5),me(i+2*f,j-5),A(i+2*f,j+5),strokeStyle="#282",me(i-s,j-h),le(i,j-h),A(e,l(i,j-h,i+f,j,e)),setLineDash([4]),me(i,j-h),A(0,l(i,j-h,i+f,j,0)),setLineDash([0]),me(i-s,j-h),A(e,l(i-s,j-h,i,j,e))}d();
+	</script>
+</body>
+</html>

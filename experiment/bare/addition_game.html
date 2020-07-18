@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Addition Game - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Addition game: Play until you don't have numbers in your hand">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+*, td {
+	font-family: monospace;
+	font-size: 12px;
+	text-align: center;
+}
+
+#mainmenu {
+	text-align: center;
+}
+
+#mainmenu, #mainmenu * {
+	font-size: 60px;
+}
+
+#game {
+	width: 640px;
+	height: 480px;
+}
+
+#game tbody tr td {
+	width: 160px;
+	height: 160px;
+}
+
+.p1 {
+	border: none;
+	background: #33b5e5;
+}
+
+.p1:hover {
+	background: #0099cc;
+}
+
+.p2 {
+	border: none;
+	background: #99cc00;
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.p2:hover {
+	background: #669900;
+}
+
+.number {
+	font-size: 150px;
+	border-radius: 150px;
+	width: 150px;
+	height: 150px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.control button, .adder button {
+	height: 30px;
+	width: 75%;
+	font-size: 25px;
+}
+
+.stat {
+	padding-top: 5px;
+	height: 70px;
+	font-size: 15px;
+	width: 75%;
+}
+	</style>
+</head>
+<body style="margin:0">
+	<div style="font-size: 10px;">
+		Addition Game<br/>
+		Fun and makes you smarter!
+	</div>
+	<noscript>
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<div id="mainmenu" style="display:none;">
+		Addition game
+		<button onclick="start()">START</button>
+	</div>
+	<table id="game" style="display:none;">
+		<tbody>
+			<tr>
+				<td><div id="p2_right" class="p2 number"></div></td>
+				<td><div id="p2_control" class="control"></td>
+				<td><div id="p2_left" class="p2 number"></div></td>
+			</tr>
+			<tr>
+				<td>
+					<div id="p2_add1" class="adder"></div>
+					<div id="p1_add2" class="adder"></div>
+				</td>
+				<td>
+					<div id="status1" class="p2 stat"></div>
+					<div id="status2" class="p1 stat"></div>
+				</td>
+				<td>
+					<div id="p2_add2" class="adder"></div>
+					<div id="p1_add1" class="adder"></div>
+				</td>
+			</tr>
+			<tr>
+				<td><div id="p1_left" class="p1 number"></div></td>
+				<td><div id="p1_control" class="control"></div></td>
+				<td><div id="p1_right" class="p1 number"></div></td>
+			</tr>
+		</tbody>
+	</table>
+	<script>
+var $ = function(id){
+return document.getElementById(id);
+};
+
+var p1 = [1,1];
+var p2 = [1,1];
+var turn = 0; //p1's turn
+var d = {
+mm: $("mainmenu"),
+g: $("game"),
+p1: {
+	c: $("p1_control"),
+	r: $("p1_right"),
+	l: $("p1_left"),
+	a1: $("p1_add1"),
+	a2: $("p1_add2"),
+	s: $("status1")
+},
+p2: {
+	c: $("p2_control"),
+	r: $("p2_right"),
+	l: $("p2_left"),
+	a1: $("p2_add1"),
+	a2: $("p2_add2"),
+	s: $("status2")
+},
+};
+
+function log(text){
+d.p1.s.innerHTML = d.p2.s.innerHTML = text;
+}
+
+function set(player,id,amount){
+var lr = ["left","right"];
+log(amount+" was added to player"+player+"'s "+lr[id]+" number");
+window["p"+player][id] = (window["p"+player][id] + amount)%5;
+turn = (turn+1) %2;
+update();
+}
+
+function setb(player,a,b){
+log("player"+player+" swap between two number ("+a+","+b+")");
+var p = window["p"+player];
+p[0] = a;
+p[1] = b;
+turn = (turn+1) %2;
+update();
+}
+
+function get_control(player){
+var p = window["p"+player];
+var total = p[0]+p[1];
+var pairs = [];
+for(var i=0;i<5;i++){
+	if(
+		total-i<5&&
+		total-i>=0&&
+		p[0]!==i&&
+		p[1]!==total-i&&
+		p[1]!==i&&
+		p[0]!==total-i
+	) {
+		pairs.push([i,total-i]);
+	}
+}
+return pairs;
+}
+
+function checkwins(){ //check for any wins
+if(p1[0] === p1[1] && p1[0] === 0){
+	return "player2";
+} else if(p2[0] === p2[1] && p2[0] === 0){
+	return "player1";
+}
+return false;
+}
+
+function start(){
+p1 = [1,1];
+p2 = [1,1];
+turn = 0; //p1's turn
+d.mm.style.display = "none";
+d.g.style.display = "";
+log("Ready, Set, Go!");
+update();
+};
+
+function update(){
+var winner = checkwins();
+if(winner!==false){
+	log(
+		winner+" wins!"+
+		"<br/>"+
+		"<button onclick='start()'>Restart</button>"
+	);
+}
+//player1
+d.p1.l.innerHTML = p1[0];
+d.p1.r.innerHTML = p1[1];
+d.p1.a1.innerHTML = [
+	"<button class='p1' onclick='set(2,0,"+p1[0]+")' "+
+		(p1[0]===0||p2[0]===0||turn===1||winner!==false?"disabled":"")+
+	">add "+p1[0]+"</button>",
+	"<br/>",
+	"<button class='p1' onclick='set(2,0,"+p1[1]+")' "+
+		(p1[1]===0||p2[0]===0||turn===1||winner!==false?"disabled":"")+
+	">add "+p1[1]+"</button>"
+].join("");
+d.p1.a2.innerHTML = [
+	"<button class='p1' onclick='set(2,1,"+p1[0]+")' "+
+		(p1[0]===0||p2[1]===0||turn===1||winner!==false?"disabled":"")+
+	">add "+p1[0]+"</button>",
+	"<br/>",
+	"<button class='p1' onclick='set(2,1,"+p1[1]+")' "+
+		(p1[1]===0||p2[1]===0||turn===1||winner!==false?"disabled":"")+
+	">add "+p1[1]+"</button>"
+].join("");
+d.p1.c.innerHTML = "";
+var c1 = get_control(1);
+for(var i=0;i<c1.length;i++){
+	d.p1.c.innerHTML +=
+		"<button class='p1' onclick='setb(1,"+c1[i][0]+","+c1[i][1]+")'"+
+			(turn===1||winner!==false?"disabled":"")+
+		">"+c1[i].join("-")+"</button><br/>";
+}
+//player2
+d.p2.l.innerHTML = p2[0];
+d.p2.r.innerHTML = p2[1];
+d.p2.a1.innerHTML = [
+	"<button class='p2' onclick='set(1,0,"+p2[0]+")' "+
+		(p2[0]===0||p1[0]===0||turn===0||winner!==false?"disabled":"")+
+	">add "+p2[0]+"</button>",
+	"<br/>",
+	"<button class='p2' onclick='set(1,0,"+p2[1]+")' "+
+		(p2[1]===0||p1[0]===0||turn===0||winner!==false?"disabled":"")+
+	">add "+p2[1]+"</button>"
+].join("");
+d.p2.a2.innerHTML = [
+	"<button class='p2' onclick='set(1,1,"+p2[0]+")' "+
+		(p2[0]===0||p1[1]===0||turn===0||winner!==false?"disabled":"")+
+	">add "+p2[0]+"</button>",
+	"<br/>",
+	"<button class='p2' onclick='set(1,1,"+p2[1]+")' "+
+		(p2[1]===0||p1[1]===0||turn===0||winner!==false?"disabled":"")+
+	">add "+p2[1]+"</button>"
+].join("");
+d.p2.c.innerHTML = "";
+var c2 = get_control(2);
+for(var i=0;i<c2.length;i++){
+	d.p2.c.innerHTML +=
+		"<button class='p2' onclick='setb(2,"+c2[i][0]+","+c2[i][1]+")'"+
+			(turn===0||winner!==false?"disabled":"")+
+		">"+c2[i].join("-")+"</button><br/>";
+}
+}
+
+window.onload = function(){
+d.mm.style.display = "";
+};
+	</script>
+</body>
+</html>

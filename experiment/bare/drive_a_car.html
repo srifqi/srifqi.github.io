@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Drive A Car - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Drive a car and avoid obstacles!">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+</head>
+<body style="margin:0">
+	<noscript>
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<canvas id="c" width="800" height="500"></canvas>
+	<script>
+var b = document.body;
+var c = document.getElementsByTagName("canvas")[0];
+var a = c.getContext("2d");
+document.body.clientWidth;
+	</script>
+	<script>
+var f=50/3,g=t=y=0,j=k=1,m=[0,0,0,0,0],h=500,w=800,p=w/8,o=w/4,r=h/5,e=250;for(n in a)a[n[0]+n[n.length>>1]]=a[n];setInterval(function(){if(j<1){return;}with(g++,a){function z(n){a.fillStyle="#"+n;}if(t>=e){t-=e;y=(y>0)?0:1;for(var A=4;A>0;)m[A]=m[--A];if(m[0]=y<1?Math.random()*3+.5|0:0,m[4]===k){j=0;font="20px sans-serif";fT("refresh for new game",w/3,h/3*2);z("f00");font="90px sans-serif";fT("crashed",w/3,h/2);return;}}t+=f;z("5e1");fR(0,0,w,h);z("b93");fR(p,0,w/4*3,h);z("6ee");fR(p+(k-1)*o,4*r,o,r);z("aaf");for(var i=0;i<5;i++){m[i]===0?0:fR(p+(m[i]-1)*o,(i-1+t/e)*r,o,r);}z("000");font="12px sans-serif";fT(g+"m",w/32,h/8)}},f);window.onkeyup=function(e){e=e.keyCode;switch(e){case 37:s(-1);break;case 39:s(1);break;}};function s(a){a>0&&k<3&&k++,a<0&&k>1&&k--}function v(x){var u=window.innerWidth,q=u*.3;x<q?s(-1):x>u-q&&s(1)}document.addEventListener("touchstart",function(e){v(e.touches[0].clientX);},!1);document.addEventListener("click",function(e){v(e.clientX);},!1);
+	</script>
+</body>
+</html>
