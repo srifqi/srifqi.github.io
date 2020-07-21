@@ -57,6 +57,10 @@ nav {
 	padding: 2px 4px;
 }
 
+.left-menu>li.active>div {
+	border: 2px inset #6293bf;
+}
+
 .left-menu>li>div>a {
 	color: white;
 	text-decoration: none;
