@@ -4,9 +4,9 @@ body {
 	border-top: 0;
 	font: 12px sans-serif;
 	font-family: Verdana, DejaVu Sans, sans-serif;
-	height: 100vh;
 	margin: 0 auto;
 	max-width: 700px;
+	min-height: 100vh;
 	width: 100%;
 }
 
@@ -40,9 +40,9 @@ nav {
 }
 
 .left-menu, .left-menu ul {
+	list-style: none;
 	margin: 0;
 	padding: 0;
-	list-style: none;
 	width: 100px;
 }
 
@@ -96,9 +96,10 @@ nav {
 
 section {
 	background: white;
-	padding: 8px;
-	width: 100%;
 	max-width: 600px;
+	padding: 8px;
+	padding-bottom: 48px;
+	width: 100%;
 }
 
 article>h2 {
@@ -128,6 +129,21 @@ table>tbody {
 
 table th, table td {
 	padding: 4px 8px;
+	vertical-align: top;
+}
+
+figure {
+	border: 1px solid #777;
+	font-size: smaller;
+	margin: 16px;
+	max-width: calc(100% - 8px);
+	padding: 3px;
+	width: 250px;
+}
+
+figure img {
+	max-width: 100%;
+	width: 250px;
 }
 
 p {
@@ -171,8 +187,8 @@ kbd {
 	background: #eeeeee;
 	border: 1px outset #aaa;
 	border-radius: 4px;
-	padding: 0 6px;
 	font-size: 12px;
+	padding: 0 6px;
 }
 
 iframe {
@@ -185,11 +201,28 @@ iframe {
 		border: none;
 	}
 
-	.left-menu {
-		width: initial;
+	header>h1 {
+		height: initial;
+	}
+
+	main {
+		flex-direction: column;
+	}
+
+	.left-menu, .left-menu ul {
+		width: 100%;
 	}
 
 	section {
-		max-width: 100%;
+		max-width: calc(100% - 16px);
+	}
+
+	aside {
+		float: none;
+		margin: 16px 0;
+	}
+
+	figure {
+		margin: 16px 0;
 	}
 }
