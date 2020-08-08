@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Vibration API - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Vibrate your device from Web!">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+body {
+	font: 16px sans-serif;
+	margin: 8px auto;
+	max-width: 800px;
+	text-align: center;
+	width: 100%;
+}
+h1 {
+	font-size: 125%;
+	margin: 16px 0;
+}
+#b {
+	background: white;
+	height: 50px;
+	width: 75%;
+}
+#p {
+	margin: 16px 0;
+}
+#freq-container {
+	background: #f7f7f7;
+	height: 360px;
+	margin: 16px auto;
+	width: 80%;
+}
+#freq {
+	display: block;
+	height: 100%;
+	width: 100%;
+	writing-mode: bt-lr;
+	-webkit-appearance: slider-vertical;
+}
+	</style>
+</head>
+<body>
+	<h1>Web Vibration API</h1>
+	<button id="b">START</button>
+	<div id="p"></div>
+	<div id="freq-container">
+		<input id="freq" type="range" min="0" max="11" value="11" step="1" orient="vertical">
+	</div>
+	<script>
+const MAX = 10;
+const STEP = 1;
+let status = false;
+let t = undefined;
+let vibrate = (f) => {
+	if (t)
+		clearTimeout(t);
+	if (!status) {
+		navigator.vibrate(0);
+		return;
+	}
+	if (f > MAX || f <= 0) {
+		if (f > MAX)
+			navigator.vibrate(2e3);
+		else if (f <= 0)
+			navigator.vibrate(0);
+		t = setTimeout(vibrate, 1e3, f);
+	} else {
+		navigator.vibrate([1e3 / f, 2 * 1e3 / f]);
+		t = setTimeout(vibrate, 2 * 1e3 / f, f);
+	}
+};
+window.onload = () => {
+	freq.min = 0;
+	freq.max = MAX;
+	freq.step = STEP;
+	freq.value = MAX + STEP;
+};
+window.onload = freq.oninput = freq.onchange = () => {
+	let f = freq.value;
+	if (f > MAX)
+		p.innerText = "(no cycle)";
+	else if (f <= 0)
+		p.innerText = "(turned off)";
+	else
+		p.innerText= freq.value + "Hz";
+	vibrate(f);
+};
+b.onclick = () => {
+	status = !status;
+	b.innerText = status ? "STOP" : "START";
+	b.style.background = status ? "lightgreen" : "";
+	vibrate(freq.value);
+};
+	</script>
+</body>
+</html>
