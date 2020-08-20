@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Genetic Algorithm - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="An example of genetic algorithm in action">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+body {
+	font: 16px sans-serif;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	text-align: center;
+}
+pre {
+	font: 12px monospace;
+	line-height: 150%;
+}
+#canvas {
+	height: 200px;
+	width: 500px;
+}
+.p {
+	text-decoration: underline;
+}
+.p, .q {
+	background: lightgreen;
+	color: green;
+}
+.d {
+	background: pink;
+	color: red;
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Hello, World!</h1>
+	<p>An example of genetic algorithm in action</p>
+	<pre id="con"></pre>
+	<canvas id="canvas" width=500 height=200></canvas>
+	<script>
+const POPULATION_SIZE = 25;
+const POPULATION = new Array(POPULATION_SIZE);
+const POPULATION_HISTORY = [];
+const POPULATION_HISTORY_SAMPLE = 25;
+const BLOCKS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.!?";
+const TARGET = "Hello, World!";
+
+let GENERATION_NUM = 0;
+const GENERATION_LIMIT = 500;
+
+const a = canvas.getContext("2d");
+const GRAPH_WIDTH = 500;
+const GRAPH_SIZE = 100;
+const g_max = new Array(GRAPH_SIZE);
+
+const randomString = (length) => {
+	let res = new Array(length);
+	for (let i = 0; i < length; i ++)
+		res[i] = randomInt(BLOCKS.length);
+	return res;
+};
+
+const randomInt = (max) => Math.round(Math.random() * max - 0.5);
+
+const toChromosome = (text) => text.split("").map(x => BLOCKS.indexOf(x));
+const toText = (chromosome) => chromosome.map(x => BLOCKS[x]).join("");
+
+let sqrtPopu = Math.floor(Math.sqrt(POPULATION_SIZE));
+function updateGUI() {
+	con.innerHTML = "generation #" + GENERATION_NUM + "\n";
+	for (let i = 0; i < POPULATION_SIZE; i ++)
+		con.innerHTML += toText(POPULATION[i]) +
+				(i % sqrtPopu == sqrtPopu - 1 ? "\n" : " ");
+	title.innerText = toText(POPULATION[0]);
+	a.clearRect(0, 0, 500, 200);
+	let graph_max = Math.max(...g_max);
+	let graph_min = Math.min(...g_max);
+	a.strokeStyle = "blue";
+	a.beginPath();
+	a.moveTo(0, 200 - (g_max[0] - graph_min) / (graph_max - graph_min) * 200);
+	for (let i = 1; i < GRAPH_SIZE; i ++)
+		a.lineTo(i / GRAPH_SIZE * GRAPH_WIDTH, 200 - (g_max[i] - graph_min) / (graph_max - graph_min) * 200);
+	a.stroke();
+	a.fillText(graph_max, 0, 20);
+	a.fillText(graph_min, 0, 190);
+}
+
+function updateGUILast() {
+	updateGUI();
+	if (GENERATION_NUM % POPULATION_HISTORY_SAMPLE != 0)
+		POPULATION_HISTORY.push([GENERATION_NUM, POPULATION.slice(0)]);
+	let con_buf = "";
+	for (let k = POPULATION_HISTORY.length - 1; k >= 0; k --) {
+		con_buf += "generation #" + POPULATION_HISTORY[k][0] + "<br>";
+		for (let i = 0; i < POPULATION_SIZE; i ++) {
+			let person = toText(POPULATION_HISTORY[k][1][i]);
+			if (person == TARGET)
+				con_buf += "<span class=\"p\">" + person + "</span>";
+			else
+				for (let c = 0; c < TARGET.length; c ++)
+					con_buf += "<span class=\"" +
+							(person[c] == TARGET[c] ? "q" : "d") +
+							"\">" + person[c] + "</span>";
+			con_buf += (i % sqrtPopu == sqrtPopu - 1 ? "<br>" : " ");
+		}
+		con_buf += "<br>";
+	}
+	con.innerHTML = con_buf;
+}
+
+function init() {
+	for (let i = 0; i < POPULATION_SIZE; i ++)
+		POPULATION[i] = randomString(TARGET.length);
+	POPULATION.sort((a, b) => fitness(b) - fitness(a));
+	for (let i = 0; i < GRAPH_SIZE; i ++)
+		g_max[i] = fitness(POPULATION[0]);
+	POPULATION_HISTORY.length = 0;
+	POPULATION_HISTORY.push([GENERATION_NUM, POPULATION.slice(0)]);
+	updateGUI();
+}
+
+function mutate(chromosome) {
+	if (Math.random() > 0.75)
+		return chromosome;
+	let pos = randomInt(chromosome.length);
+	let amount = randomInt(BLOCKS.length);
+	chromosome[pos] = (chromosome[pos] + amount) % BLOCKS.length;
+	return chromosome;
+}
+
+function crossover(parentA, parentB) {
+	let pos = randomInt(parentA.length);
+	let childA = parentA.slice(0, pos).concat(parentB.slice(pos, parentB.length));
+	let childB = parentB.slice(0, pos).concat(parentA.slice(pos, parentA.length));
+	return Math.random() < 0.5 ? childA : childB;
+}
+
+let TARGET_C = toChromosome(TARGET);
+function fitness(chromosome) {
+	let error = 0;
+	for (let i = 0; i < chromosome.length; i ++)
+		error -= Math.pow(chromosome[i] - TARGET_C[i], 2);
+	return error;
+}
+
+function generate() {
+	let newP = new Array(POPULATION_SIZE);
+	const POPULATION_SIZE_HALF = Math.floor(POPULATION_SIZE / 2);
+	const POPULATION_SIZE_QUARTER = Math.floor(POPULATION_SIZE / 4);
+	for (let i = 0; i < POPULATION_SIZE; i ++) {
+		let parentA = POPULATION[Math.floor(i / POPULATION_SIZE_QUARTER)];
+		let parentB = POPULATION[i % POPULATION_SIZE_QUARTER];
+		// console.log(i, Math.floor(i / POPULATION_SIZE_QUARTER), i % POPULATION_SIZE_QUARTER);
+		newP[i] = crossover(parentA, parentB);
+	}
+	for (let i = 0; i < POPULATION_SIZE; i ++)
+		POPULATION[i] = mutate(newP[i]);
+	POPULATION.sort((a, b) => fitness(b) - fitness(a));
+	g_max.shift();
+	g_max.push(fitness(POPULATION[0]));
+	GENERATION_NUM ++;
+	if (GENERATION_NUM % POPULATION_HISTORY_SAMPLE == 0)
+		POPULATION_HISTORY.push([GENERATION_NUM, POPULATION.slice(0)]);
+	updateGUI();
+}
+
+init();
+
+let runner = setInterval(() => {
+	if (title.innerText == TARGET || GENERATION_NUM >= GENERATION_LIMIT) {
+		clearInterval(runner);
+		updateGUILast();
+		if (GENERATION_NUM >= GENERATION_LIMIT)
+			title.innerHTML += "<br><small>(aborted; too long)</small>";
+	} else {
+		generate();
+	}
+}, 10);
+	</script>
+</body>
+</html>
