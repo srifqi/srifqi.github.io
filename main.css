@@ -43,7 +43,7 @@ nav {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	width: 100px;
+	width: 120px;
 }
 
 .left-menu>li {
@@ -182,6 +182,7 @@ code {
 }
 
 pre {
+	background: #f7f7f7;
 	max-width: 100%;
 	overflow-x: scroll;
 	width: 500px;
