@@ -13,6 +13,26 @@ body {
 	overflow-y: scroll;
 	text-align: center;
 }
+#form {
+	display: none;
+	text-align: left;
+}
+#form label {
+	display: block;
+	margin: 4px auto;
+	width: 350px;
+}
+#form br {
+	display: block;
+	height: 4px;
+}
+#form input {
+	background: white;
+	border: 1px solid #e0e0e0;
+	float: right;
+	height: 16px;
+	width: 200px;
+}
 pre {
 	font: 12px monospace;
 	line-height: 150%;
@@ -37,18 +57,29 @@ pre {
 <body>
 	<h1 id="title">Hello, World!</h1>
 	<p>An example of genetic algorithm in action</p>
+	<p>
+		<button id="btnResume">Resume</button>
+		<button id="btnRestart" disabled="disabled">Restart</button>
+		<button id="btnEdit" disabled="disabled">Edit environment</button>
+	</p>
+	<p id="form">
+		<label>Population size: <input type="number" id="pSize" min="4" value="25"></label><br>
+		<label>Generation limit: <input type="number" id="genLim" min="1" value="500"></label><br>
+		<label>Target: <input type="text" id="trgtText"></label><br>
+		<label>Building blocks: <input type="text" id="bBlocks"></label>
+	</p>
 	<pre id="con"></pre>
 	<canvas id="canvas" width=500 height=200></canvas>
 	<script>
-const POPULATION_SIZE = 25;
-const POPULATION = new Array(POPULATION_SIZE);
-const POPULATION_HISTORY = [];
-const POPULATION_HISTORY_SAMPLE = 25;
-const BLOCKS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.!?";
-const TARGET = "Hello, World!";
+var POPULATION_SIZE = 25;
+var POPULATION = new Array(POPULATION_SIZE);
+var POPULATION_HISTORY = [];
+var POPULATION_HISTORY_SAMPLE = 25;
+var BLOCKS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.!?";
+var TARGET = "Hello, World!";
 
 let GENERATION_NUM = 0;
-const GENERATION_LIMIT = 500;
+var GENERATION_LIMIT = 500;
 
 const a = canvas.getContext("2d");
 const GRAPH_WIDTH = 500;
@@ -111,6 +142,8 @@ function updateGUILast() {
 }
 
 function init() {
+	GENERATION_NUM = 0;
+	TARGET_C = toChromosome(TARGET);
 	for (let i = 0; i < POPULATION_SIZE; i ++)
 		POPULATION[i] = randomString(TARGET.length);
 	POPULATION.sort((a, b) => fitness(b) - fitness(a));
@@ -137,7 +170,7 @@ function crossover(parentA, parentB) {
 	return Math.random() < 0.5 ? childA : childB;
 }
 
-let TARGET_C = toChromosome(TARGET);
+let TARGET_C;
 function fitness(chromosome) {
 	let error = 0;
 	for (let i = 0; i < chromosome.length; i ++)
@@ -166,18 +199,78 @@ function generate() {
 	updateGUI();
 }
 
-init();
-
-let runner = setInterval(() => {
+function runner() {
 	if (title.innerText == TARGET || GENERATION_NUM >= GENERATION_LIMIT) {
-		clearInterval(runner);
+		clearInterval(timer);
+		timer = undefined;
+		btnResume.innerText = "Pause";
+		btnResume.disabled = "disabled";
+		btnRestart.disabled = "";
+		btnEdit.disabled = "";
 		updateGUILast();
-		if (GENERATION_NUM >= GENERATION_LIMIT)
+		if (title.innerText != TARGET && GENERATION_NUM >= GENERATION_LIMIT)
 			title.innerHTML += "<br><small>(aborted; too long)</small>";
 	} else {
 		generate();
 	}
-}, 10);
+}
+
+let timer;
+function restart() {
+	init();
+	timer = setInterval(runner, 10);
+	btnResume.innerText = "Pause";
+	btnResume.disabled = "";
+	btnRestart.disabled = "disabled";
+	btnEdit.disabled = "disabled";
+}
+restart();
+pSize.value = pSize.placeholder = POPULATION_SIZE;
+genLim.value = genLim.placeholder = GENERATION_LIMIT;
+trgtText.value = trgtText.placeholder = TARGET;
+bBlocks.value = bBlocks.placeholder = BLOCKS;
+
+pSize.oninput = pSize.onchange = () => POPULATION_SIZE = pSize.value;
+genLim.oninput = genLim.onchange = () => GENERATION_LIMIT = genLim.value;
+trgtText.oninput = trgtText.onchange = () => TARGET = trgtText.value;
+bBlocks.oninput = bBlocks.onchange = () => BLOCKS = bBlocks.value;
+
+btnResume.addEventListener("click", () => {
+	if (timer == undefined) {
+		timer = setInterval(runner, 10);
+		btnResume.innerText = "Pause";
+		btnRestart.disabled = "disabled";
+		btnEdit.disabled = "disabled";
+	} else {
+		clearInterval(timer);
+		timer = undefined;
+		btnResume.innerText = "Resume";
+		btnRestart.disabled = "";
+		btnEdit.disabled = "";
+	}
+});
+
+btnRestart.addEventListener("click", () => {
+	if (timer == undefined) {
+		if (POPULATION_SIZE < 4) {
+			alert("Population size should not be less than 4.");
+			return;
+		}
+		if (GENERATION_LIMIT < 1) {
+			alert("Generation limit should not be less than 1.");
+			return;
+		}
+		form.style.display = "";
+		restart();
+	}
+});
+
+btnEdit.addEventListener("click", () => {
+	btnResume.disabled = "disabled";
+	btnRestart.disabled = "";
+	btnEdit.disabled = "disabled";
+	form.style.display = "block";
+});
 	</script>
 </body>
 </html>
