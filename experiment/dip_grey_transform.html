@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Addition Game - Experiments - srifqi</title>
+	<title>Greyscale Transformation - Experiments - srifqi</title>
 	<meta charset="utf-8">
 	<meta name="author" content="srifqi">
-	<meta name="description" content="Addition game: Play until you don't have numbers in your hand">
+	<meta name="description" content="An example of greyscale transformation in digital image processing">
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	<link rel="stylesheet" href="/main.css">
 </head>
 <body style="border: 0; max-width: 100%;">
-	<header><h1>Addition Game Experiment</h1></header>
+	<header><h1>Greyscale Transformation Experiment</h1></header>
 	<main>
 		<nav>
 			<ul class="left-menu">
 				<li><div><a href="/">Home</a></div></li>
 				<li><div><a href="./">Experiments</a></div><ul>
-					<li><a href="dip_grey_transform.html">Grey Transform</a></li>
+					<li class="active"><a href="dip_grey_transform.html">Grey Transform</a></li>
 					<li><a href="genetic_algorithm.html">Genetic Algorithm</a></li>
 					<li><a href="vibration_test.html">Web Vibration API</a></li>
-					<li class="active"><a href="addition_game.html">Addition Game</a></li>
+					<li><a href="addition_game.html">Addition Game</a></li>
 					<li><a href="negative_lens.html">Negative Lens</a></li>
 					<li><a href="positive_lens.html">Positive Lens</a></li>
 					<li><a href="waterdrop.html">Waterdrop</a></li>
@@ -32,18 +32,19 @@
 			<aside>
 				<table>
 					<thead>
-						<tr><th colspan="2">Addition Game</th></tr>
+						<tr><th colspan="2">Greyscale Transformation</th></tr>
 					</thead>
 					<tbody>
-						<tr><th>Type</th><td>HTML game</td></tr>
-						<tr><th>Date</th><td><time datetime="2014-09-29">29 September 2014</time></td></tr>
+						<tr><th>Type</th><td>Course material</td></tr>
+						<tr><th>Date</th><td><time datetime="2020-10-01">1 October 2020</time></td></tr>
 					</tbody>
 				</table>
 			</aside>
-			<p>This was created because I want to implement a game that was played so much, either at school or when playing with friends in my neighbourhood.</p>
-			<p><span class="italic">Play until you don't have numbers in your hand</span></p>
-			<p><a href="bare/addition_game.html" target="_blank">open in new window</a></p>
-			<iframe style="width: 644px; height: 554px;" src="bare/addition_game.html"></iframe>
+			<p>This was created from an assignment. I did it in GNU Octave. But, I want to try doing it in JavaScript.</p>
+			<p>There are three transformation: image negative (invert color), logarithmic transformation, and power-law (gamma) transformation.</p>
+			<p><span class="italic">Power-law transformation can be used for contrast streching.</span></p>
+			<p><a href="bare/dip/grey_transform.html" target="_blank">open in new window</a></p>
+			<iframe style="width: 800px; height: 500px;" src="bare/dip/grey_transform.html"></iframe>
 		</section>
 	</main>
 </body>
