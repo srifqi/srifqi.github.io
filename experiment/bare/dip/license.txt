@@ -1,3 +1,11 @@
+noisy-photo
+Highimgnoise
+Lugiadoom (Public Domain)
+
+salt-and-pepper
+Noise salt and pepper
+Marko Meza (Public Domain)
+
 torii
 Aoi Aso-jinja, torii
 Saigen Jiro (CC0 1.0)

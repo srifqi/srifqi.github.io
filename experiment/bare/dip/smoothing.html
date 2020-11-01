@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Smoothing - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="An example of image smoothing (mean, Gaussian, and median filter) in digital image processing">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+noscript, .noscript {
+	background: #fff9cC2;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: block;
+	padding: 4px;
+	margin: 8px;
+}
+
+noscript, .noscript, noscript *, .noscript * {
+	font: 12px sans-serif !important;
+}
+
+body {
+	font: 16px sans-serif;
+	margin: 0 auto;
+	max-width: 800px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+.equation {
+	text-align: center;
+}
+
+.figures {
+	margin: 24px 0;
+	text-align: center;
+}
+
+.figures img, .figures canvas {
+	display: inline-block;
+	height: 256px;
+	width: 256px;
+}
+
+input[type=range], #slider {
+	max-width: 400px;
+	width: 90%;
+}
+
+@media (max-width: 832px) {
+	body {
+		margin: 0 8px;
+		width: calc(100% - 16px);
+	}
+}
+
+/* MathML compatibility */
+
+body.no-mathml .eq-mathml {
+	display: none;
+}
+
+body.mathml .eq-image {
+	display: none;
+}
+
+.eq-image img {
+	background-color: white;
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Image Smoothing</h1>
+	<noscript class="noscript">
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<article>
+		<h2>Mean/Box Filter</h2>
+		<p>Below is an example of mean filter (box filter).</p>
+		<p class="equation eq-mathml"><math><mfrac><mn>1</mn><mn>9</mn></mfrac> <mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+		<p class="equation eq-image"><img src="smoothing-eq-1.png" height=75 style="height: 75px;"></p>
+		<div class="figures">
+			<img id=imgA src="noisy-photo.png">
+			<canvas id=cA width=256 height=256></canvas>
+		</div>
+	</article>
+	<article>
+		<h2>Gaussian blur</h2>
+		<p>Below is an example of Gaussian blur with <math><mn>σ</mn> <mo>=</mo> 1</math>.</p>
+		<p class="equation eq-mathml"><math><mfrac><mn>1</mn><mn>4.8976</mn></mfrac> <mrow><mo>(</mo><mtable><mtr><mtd><mn>0.3679</mn></mtd><mtd><mn>0.6065</mn></mtd><mtd><mn>0.3679</mn></mtd></mtr><mtr><mtd><mn>0.6065</mn></mtd><mtd><mn>1.0000</mn></mtd><mtd><mn>0.6065</mn></mtd></mtr><mtr><mtd><mn>0.3679</mn></mtd><mtd><mn>0.6065</mn></mtd><mtd><mn>0.3679</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+		<p class="equation eq-image"><img src="smoothing-eq-2.png" height=75 style="height: 75px;"></p>
+		<div class="figures">
+			<img id=imgB src="noisy-photo.png">
+			<canvas id=cB width=256 height=256></canvas>
+		</div>
+	</article>
+	<article>
+		<h2>Median filter</h2>
+		<p>Below is an example of median filter. Median filter works best for salt-and-pepper noises.</p>
+		<div class="figures">
+			<img id=imgC src="salt-and-pepper.png">
+			<canvas id=cC width=256 height=256></canvas>
+		</div>
+	</article>
+	<script>
+const SIZE = 256;
+const aA = cA.getContext("2d");
+const aB = cB.getContext("2d");
+const aC = cC.getContext("2d");
+var imgData1, imgData2;
+const Gauss = [
+	[0.3679, 0.6065, 0.3679],
+	[0.6065, 1.0000, 0.6065],
+	[0.3679, 0.6065, 0.3679]
+];
+window.addEventListener("load", function() {
+	aA.drawImage(imgA, 0, 0);
+	imgData1 = aA.getImageData(0, 0, SIZE, SIZE);
+	let canvasDataA = new ImageData(new Uint8ClampedArray(imgData1.data), imgData1.width, imgData1.height);
+	for (let j = 1; j < canvasDataA.height - 1; j ++) {
+	for (let i = 1; i < canvasDataA.width - 1; i ++) {
+		let k = (j * canvasDataA.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData1.data[((j + y) * canvasDataA.width + i + x) * 4];
+		sum /= 9;
+		canvasDataA.data[k    ] = sum;
+		canvasDataA.data[k + 1] = sum;
+		canvasDataA.data[k + 2] = sum;
+	}
+	}
+	aA.putImageData(canvasDataA, 0, 0);
+	let canvasDataB = new ImageData(new Uint8ClampedArray(imgData1.data), imgData1.width, imgData1.height);
+	for (let j = 1; j < canvasDataB.height - 1; j ++) {
+	for (let i = 1; i < canvasDataB.width - 1; i ++) {
+		let k = (j * canvasDataA.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData1.data[((j + y) * canvasDataB.width + i + x) * 4] * Gauss[y + 1][x + 1];
+		sum /= 4.8976;
+		canvasDataB.data[k    ] = sum;
+		canvasDataB.data[k + 1] = sum;
+		canvasDataB.data[k + 2] = sum;
+	}
+	}
+	aB.putImageData(canvasDataB, 0, 0);
+	aC.drawImage(imgC, 0, 0);
+	imgData2 = aC.getImageData(0, 0, SIZE, SIZE);
+	let canvasDataC = new ImageData(new Uint8ClampedArray(imgData2.data), imgData2.width, imgData2.height);
+	for (let j = 1; j < canvasDataC.height - 1; j ++) {
+	for (let i = 1; i < canvasDataC.width - 1; i ++) {
+		let k = (j * canvasDataA.width + i) * 4;
+		let list = new Uint8ClampedArray(9);
+		let idx = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			list[idx ++] = imgData2.data[((j + y) * canvasDataC.width + i + x) * 4];
+		list.sort();
+		canvasDataC.data[k    ] = list[4];
+		canvasDataC.data[k + 1] = list[4];
+		canvasDataC.data[k + 2] = list[4];
+	}
+	}
+	aC.putImageData(canvasDataC, 0, 0);
+});
+// Change to image for those who does not support MathML
+// https://stackoverflow.com/a/28835508
+(function() {
+	let uaCheck = navigator.userAgent.match(/Chrome\/[0-9]+/);
+	if (uaCheck != null && uaCheck.length == 1 ||
+			!document.implementation.hasFeature("org.w3c.dom.mathml")) {
+		document.body.className = "no-mathml";
+		console.log("No MathML support these days?");
+	} else if (document.implementation.hasFeature("org.w3c.dom.mathml"))
+		document.body.className = "mathml";
+})();
+	</script>
+</body>
+</html>

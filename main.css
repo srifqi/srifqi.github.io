@@ -198,6 +198,7 @@ kbd {
 
 iframe {
 	border: 2px inset black;
+	max-height: 80vh;
 	max-width: 100%;
 }
 
