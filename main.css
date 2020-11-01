@@ -232,3 +232,20 @@ iframe {
 		margin: 16px 0;
 	}
 }
+
+/* Experiment-related */
+
+.exp-dip, .exp-kilo {
+	border-radius: 4px;
+	color: black;
+	font-size: 75%;
+	padding: 1px 4px;
+}
+
+.exp-dip {
+	background: #ffc0c0;
+}
+
+.exp-kilo {
+	background: #bbeaea;
+}
