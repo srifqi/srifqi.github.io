@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Image Smoothing - Experiments - srifqi</title>
+	<title>Point and Edge Detection - Experiments - srifqi</title>
 	<meta charset="utf-8">
 	<meta name="author" content="srifqi">
-	<meta name="description" content="An example of image smoothing (mean, Gaussian, and median filter) in digital image processing">
+	<meta name="description" content="An example of point and edge detection using filters in digital image processing">
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	<link rel="stylesheet" href="/main.css">
 </head>
 <body style="border: 0; max-width: 100%;">
-	<header><h1>Image Smoothing Experiment</h1></header>
+	<header><h1>Point and Edge Detection</h1></header>
 	<main>
 		<nav>
 			<ul class="left-menu">
 				<li><div><a href="/">Home</a></div></li>
 				<li><div><a href="./">Experiments</a></div><ul>
-					<li><a href="dip_edge_detection.html">Edge Detection</a></li>
-					<li class="active"><a href="dip_smoothing.html">Image Smoothing</a></li>
+					<li class="active"><a href="dip_edge_detection.html">Edge Detection</a></li>
+					<li><a href="dip_smoothing.html">Image Smoothing</a></li>
 					<li><a href="dip_grey_transform.html">Grey Transform</a></li>
 					<li><a href="genetic_algorithm.html">Genetic Algorithm</a></li>
 					<li><a href="vibration_test.html">Web Vibration API</a></li>
@@ -34,19 +34,19 @@
 			<aside>
 				<table>
 					<thead>
-						<tr><th colspan="2">Image Smoothing<br><span class="exp-dip">DIP</span></th></tr>
+						<tr><th colspan="2">Point and Edge Detection<br><span class="exp-dip">DIP</span></th></tr>
 					</thead>
 					<tbody>
 						<tr><th>Type</th><td>Course material</td></tr>
-						<tr><th>Date</th><td><time datetime="2020-10-01">1 November 2020</time></td></tr>
+						<tr><th>Date</th><td><time datetime="2020-10-01">4 November 2020</time></td></tr>
 					</tbody>
 				</table>
 			</aside>
 			<p>Again, this was created from an assignment. I did it in GNU Octave. But, I want to try doing it in JavaScript.</p>
-			<p>There are three smoothing techniques: mean blur (box blur), Gaussian blur, and median filter.</p>
-			<p><span class="italic">For salt-and-paper noises, median filter works very well!</span></p>
-			<p><a href="bare/dip/smoothing.html" target="_blank">open in new window</a></p>
-			<iframe style="width: 800px; height: 500px;" src="bare/dip/smoothing.html"></iframe>
+			<p>There are one point detector and three edge detector: Sobel operator, Prewitt operator, and Robert cross.</p>
+			<p><span class="italic">It seems like Sobel operator is the brightest. This is a reason to use thresholding after edge detection.</span></p>
+			<p><a href="bare/dip/edge_detection.html" target="_blank">open in new window</a></p>
+			<iframe style="width: 850px; height: 500px;" src="bare/dip/edge_detection.html"></iframe>
 		</section>
 	</main>
 </body>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Point and Edge Detection - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="An example of point and edge detection using filters in digital image processing">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+noscript, .noscript {
+	background: #fff9cC2;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: block;
+	padding: 4px;
+	margin: 8px;
+}
+
+noscript, .noscript, noscript *, .noscript * {
+	font: 12px sans-serif !important;
+}
+
+body {
+	font: 16px sans-serif;
+	margin: 0 auto;
+	max-width: 800px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+.equation {
+	text-align: center;
+}
+
+.figures {
+	margin: 12px 0;
+	text-align: center;
+}
+
+.figures img, .figures canvas, .figures .figure {
+	display: inline-block;
+	height: 256px;
+	margin: 12px 0;
+	width: 256px;
+}
+
+@media (max-width: 832px) {
+	body {
+		margin: 0 8px;
+		width: calc(100% - 16px);
+	}
+}
+
+/* MathML compatibility */
+
+body.no-mathml .eq-mathml {
+	display: none;
+}
+
+body.mathml .eq-image {
+	display: none;
+}
+
+.eq-image img {
+	background-color: white;
+	height: initial;
+	width: initial;
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Point and Edge Detection</h1>
+	<noscript class="noscript">
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<article>
+	<h2>Point Detection</h2>
+		<p>Below is an example of point detection.</p>
+		<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>8</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+		<p class="equation eq-image"><img src="edge_detection-eq-1.png" height=75 style="height: 75px;"></p>
+		<div class="figures">
+			<img id=imgA src="valve.png">
+			<canvas id=cA width=256 height=256></canvas>
+		</div>
+	</article>
+	<article>
+		<h2>Edge Detection</h2>
+		<p>Below is an example of edge detection using Sobel, Prewitt, and Roberts filter.</p>
+		<article>
+			<h3>Sobel filter</h3>
+			<p>Sobel filter uses two kernels to calculate derivatives of each pixel: horizontal and vertical. Then, we combine those results to get magnitude.</p>
+			<div class="figures">
+				<div class="figure">
+					<b>Horizontal</b><br>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-2</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-2.png" height=75 style="height: 75px;"></p>
+					<canvas id=cB width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>Vertical</b>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-2</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-3.png" height=75 style="height: 75px;"></p>
+					<canvas id=cC width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>Magnitude</b><br>
+					<p class="equation eq-mathml" style="height: 75px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<canvas id=cD width=256 height=256></canvas>
+				</div>
+			</div>
+		</article>
+		<article>
+			<h3>Prewitt filter</h3>
+			<p>Prewitt filter acts like Sobel filter, but does not focus on the middle.</p>
+			<div class="figures">
+				<div class="figure">
+					<b>Horizontal</b><br>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-5.png" height=75 style="height: 75px;"></p>
+					<canvas id=cE width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>Vertical</b>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-6.png" height=75 style="height: 75px;"></p>
+					<canvas id=cF width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>Magnitude</b><br>
+					<p class="equation eq-mathml" style="height: 75px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<canvas id=cG width=256 height=256></canvas>
+				</div>
+			</div>
+		</article>
+		<article>
+			<h3>Roberts filter</h3>
+			<p>Roberts filter uses diagonals instead of x and y axis.</p>
+			<div class="figures">
+				<div class="figure">
+					<b>45 degrees</b><br>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-7.png" height=75 style="height: 54px;"></p>
+					<canvas id=cH width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>135 degrees</b>
+					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>0</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-8.png" height=75 style="height: 54px;"></p>
+					<canvas id=cI width=256 height=256></canvas>
+				</div>
+				<div class="figure">
+					<b>Magnitude</b><br>
+					<p class="equation eq-mathml" style="height: 54px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<canvas id=cJ width=256 height=256></canvas>
+				</div>
+			</div>
+		</article>
+	</article>
+	<script>
+const SIZE = 256;
+const aA = cA.getContext("2d");
+const aB = cB.getContext("2d");
+const aC = cC.getContext("2d");
+const aD = cD.getContext("2d");
+const aE = cE.getContext("2d");
+const aF = cF.getContext("2d");
+const aG = cG.getContext("2d");
+const aH = cH.getContext("2d");
+const aI = cI.getContext("2d");
+const aJ = cJ.getContext("2d");
+var imgData;
+const Point = [
+	[-1, -1, -1],
+	[-1,  8, -1],
+	[-1, -1, -1]
+];
+const SobelX = [
+	[1, 0, -1],
+	[2, 0, -2],
+	[1, 0, -1]
+];
+const SobelY = [
+	[ 1,  2,  1],
+	[ 0,  0,  0],
+	[-1, -2, -1]
+];
+const PrewittX = [
+	[1, 0, -1],
+	[1, 0, -1],
+	[1, 0, -1]
+];
+const PrewittY = [
+	[ 1,  1,  1],
+	[ 0,  0,  0],
+	[-1, -1, -1]
+];
+const RobertsA = [
+	[1,  0],
+	[0, -1]
+];
+const RobertsB = [
+	[ 0, 1],
+	[-1, 0]
+];
+window.addEventListener("load", function() {
+	aA.drawImage(imgA, 0, 0);
+	imgData = aA.getImageData(0, 0, SIZE, SIZE);
+	// Point detection
+	let canvasDataA = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataA.height - 1; j ++) {
+	for (let i = 1; i < canvasDataA.width - 1; i ++) {
+		let k = (j * canvasDataA.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataA.width + i + x) * 4] * Point[y + 1][x + 1];
+		canvasDataA.data[k    ] = sum;
+		canvasDataA.data[k + 1] = sum;
+		canvasDataA.data[k + 2] = sum;
+	}
+	}
+	aA.putImageData(canvasDataA, 0, 0);
+	// Edge detection
+	// Sobel filter
+	let canvasDataB = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataB.height - 1; j ++) {
+	for (let i = 1; i < canvasDataB.width - 1; i ++) {
+		let k = (j * canvasDataB.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataB.width + i + x) * 4] * SobelX[y + 1][x + 1];
+		canvasDataB.data[k    ] = sum;
+		canvasDataB.data[k + 1] = sum;
+		canvasDataB.data[k + 2] = sum;
+	}
+	}
+	aB.putImageData(canvasDataB, 0, 0);
+	let canvasDataC = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataC.height - 1; j ++) {
+	for (let i = 1; i < canvasDataC.width - 1; i ++) {
+		let k = (j * canvasDataC.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataC.width + i + x) * 4] * SobelY[y + 1][x + 1];
+		canvasDataC.data[k    ] = sum;
+		canvasDataC.data[k + 1] = sum;
+		canvasDataC.data[k + 2] = sum;
+	}
+	}
+	aC.putImageData(canvasDataC, 0, 0);
+	let canvasDataD = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataD.height; j ++) {
+	for (let i = 1; i < canvasDataD.width; i ++) {
+		let k = (j * canvasDataD.width + i) * 4;
+		let sum = Math.round(Math.sqrt(Math.pow(canvasDataB.data[k], 2) + Math.pow(canvasDataC.data[k], 2)));
+		canvasDataD.data[k    ] = sum;
+		canvasDataD.data[k + 1] = sum;
+		canvasDataD.data[k + 2] = sum;
+	}
+	}
+	aD.putImageData(canvasDataD, 0, 0);
+	// Prewitt filter
+	let canvasDataE = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataE.height - 1; j ++) {
+	for (let i = 1; i < canvasDataE.width - 1; i ++) {
+		let k = (j * canvasDataE.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataE.width + i + x) * 4] * PrewittX[y + 1][x + 1];
+		canvasDataE.data[k    ] = sum;
+		canvasDataE.data[k + 1] = sum;
+		canvasDataE.data[k + 2] = sum;
+	}
+	}
+	aE.putImageData(canvasDataE, 0, 0);
+	let canvasDataF = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataF.height - 1; j ++) {
+	for (let i = 1; i < canvasDataF.width - 1; i ++) {
+		let k = (j * canvasDataF.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y <= 1; y ++)
+		for (let x = -1; x <= 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataF.width + i + x) * 4] * PrewittY[y + 1][x + 1];
+		canvasDataF.data[k    ] = sum;
+		canvasDataF.data[k + 1] = sum;
+		canvasDataF.data[k + 2] = sum;
+	}
+	}
+	aF.putImageData(canvasDataF, 0, 0);
+	let canvasDataG = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataG.height; j ++) {
+	for (let i = 1; i < canvasDataG.width; i ++) {
+		let k = (j * canvasDataG.width + i) * 4;
+		let sum = Math.round(Math.sqrt(Math.pow(canvasDataE.data[k], 2) + Math.pow(canvasDataF.data[k], 2)));
+		canvasDataG.data[k    ] = sum;
+		canvasDataG.data[k + 1] = sum;
+		canvasDataG.data[k + 2] = sum;
+	}
+	}
+	aG.putImageData(canvasDataG, 0, 0);
+	// Roberts filter
+	let canvasDataH = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataH.height; j ++) {
+	for (let i = 1; i < canvasDataH.width; i ++) {
+		let k = (j * canvasDataH.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y < 1; y ++)
+		for (let x = -1; x < 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataH.width + i + x) * 4] * RobertsA[y + 1][x + 1];
+		canvasDataH.data[k    ] = sum;
+		canvasDataH.data[k + 1] = sum;
+		canvasDataH.data[k + 2] = sum;
+	}
+	}
+	aH.putImageData(canvasDataH, 0, 0);
+	let canvasDataI = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataI.height; j ++) {
+	for (let i = 1; i < canvasDataI.width; i ++) {
+		let k = (j * canvasDataI.width + i) * 4;
+		let sum = 0;
+		for (let y = -1; y < 1; y ++)
+		for (let x = -1; x < 1; x ++)
+			sum += imgData.data[((j + y) * canvasDataI.width + i + x) * 4] * RobertsB[y + 1][x + 1];
+		canvasDataI.data[k    ] = sum;
+		canvasDataI.data[k + 1] = sum;
+		canvasDataI.data[k + 2] = sum;
+	}
+	}
+	aI.putImageData(canvasDataI, 0, 0);
+	let canvasDataJ = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 1; j < canvasDataJ.height; j ++) {
+	for (let i = 1; i < canvasDataJ.width; i ++) {
+		let k = (j * canvasDataJ.width + i) * 4;
+		let sum = Math.round(Math.sqrt(Math.pow(canvasDataH.data[k], 2) + Math.pow(canvasDataI.data[k], 2)));
+		canvasDataJ.data[k    ] = sum;
+		canvasDataJ.data[k + 1] = sum;
+		canvasDataJ.data[k + 2] = sum;
+	}
+	}
+	aJ.putImageData(canvasDataJ, 0, 0);
+});
+// Change to image for those who does not support MathML
+// https://stackoverflow.com/a/28835508
+(function() {
+	let uaCheck = navigator.userAgent.match(/Chrome\/[0-9]+/);
+	if (uaCheck != null && uaCheck.length == 1 ||
+			!document.implementation.hasFeature("org.w3c.dom.mathml")) {
+		document.body.className = "no-mathml";
+		console.log("No MathML support these days?");
+	} else if (document.implementation.hasFeature("org.w3c.dom.mathml"))
+		document.body.className = "mathml";
+})();
+	</script>
+</body>
+</html>

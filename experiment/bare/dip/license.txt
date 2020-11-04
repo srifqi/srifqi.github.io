@@ -9,3 +9,7 @@ Marko Meza (Public Domain)
 torii
 Aoi Aso-jinja, torii
 Saigen Jiro (CC0 1.0)
+
+valve
+Valve original (1)
+Simpsons contributor (CC BY-SA 3.0)
