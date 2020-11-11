@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Contrast Enhancement - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="An example of contrast enhancement in digital image processing">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+noscript, .noscript {
+	background: #fff9cC2;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: block;
+	padding: 4px;
+	margin: 8px;
+}
+
+noscript, .noscript, noscript *, .noscript * {
+	font: 12px sans-serif !important;
+}
+
+body {
+	font: 16px sans-serif;
+	margin: 0 auto;
+	max-width: 800px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+.figures {
+	margin: 12px 0;
+	text-align: center;
+}
+
+.figures img, .figures canvas {
+	display: inline-block;
+	height: 256px;
+	margin: 12px 0;
+	width: 256px;
+}
+
+@media (max-width: 832px) {
+	body {
+		margin: 0 8px;
+		width: calc(100% - 16px);
+	}
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Contrast Enhancement</h1>
+	<noscript class="noscript">
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<p>Contrast enhancement is a technique to make objects in an image easier to distinguish.</p>
+	<div class="figures">
+		<img id=img src="hawkesbay.png">
+		<canvas id=c width=256 height=256></canvas>
+	</div>
+	<article>
+		<h2>Contrast Stretching</h2>
+		<p>Below is an example of contrast stretching. The histogram's shape is the same, but stretched, hence it is also called histogram stretching.</p>
+		<div class="figures">
+			<canvas id=cA1 width=256 height=256></canvas>
+			<canvas id=cA2 width=256 height=256></canvas>
+		</div>
+	</article>
+	<article>
+		<h2>Histogram Equalization</h2>
+		<p>Below is an example of histogram equalization. Each intensity level is mapped (red) to make the histogram equalized. Note that the cumulative histogram (blue) is approaching a straight line.</p>
+		<div class="figures">
+			<canvas id=cB1 width=256 height=256></canvas>
+			<canvas id=cB2 width=256 height=256></canvas>
+		</div>
+	</article>
+	<script>
+const SIZE = 256;
+const a = c.getContext("2d");
+const aA1 = cA1.getContext("2d");
+const aA2 = cA2.getContext("2d");
+const aB1 = cB1.getContext("2d");
+const aB2 = cB2.getContext("2d");
+var imgData;
+window.addEventListener("load", function() {
+	a.drawImage(img, 0, 0);
+	imgData = a.getImageData(0, 0, SIZE, SIZE);
+	let freq = [];
+	for (let i = 0; i < 256; i ++)
+		freq.push(0);
+	for (let j = 0; j < imgData.height; j ++)
+	for (let i = 0; i < imgData.width; i ++)
+		freq[imgData.data[(j * imgData.width + i) * 4]] ++;
+	let max = Math.max(...freq);
+	a.clearRect(0, 0, 256, 256);
+	a.fillStyle = "grey";
+	for (let i = 0; i < 256; i ++)
+		a.fillRect(i, 255 - freq[i] / max * 255, 1, freq[i] / max * 255);
+	// Contrast stretching
+	let minVal = 255;
+	let maxVal = 0;
+	for (let j = 0; j < imgData.height; j ++) {
+	for (let i = 0; i < imgData.width; i ++) {
+		let k = (j * imgData.width + i) * 4;
+		if (imgData.data[k] < minVal)
+			minVal = imgData.data[k];
+		if (imgData.data[k] > maxVal)
+			maxVal = imgData.data[k];
+	}
+	}
+	let range = maxVal - minVal;
+	let canvasDataA1 = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 0; j < canvasDataA1.height; j ++) {
+	for (let i = 0; i < canvasDataA1.width; i ++) {
+		let k = (j * canvasDataA1.width + i) * 4;
+		let newVal = (imgData.data[k] - minVal) * 255 / range;
+		canvasDataA1.data[k    ] = newVal;
+		canvasDataA1.data[k + 1] = newVal;
+		canvasDataA1.data[k + 2] = newVal;
+	}
+	}
+	aA1.putImageData(canvasDataA1, 0, 0);
+	let freqA = [];
+	for (let i = 0; i < 256; i ++)
+		freqA.push(0);
+	for (let j = 0; j < canvasDataA1.height; j ++)
+	for (let i = 0; i < canvasDataA1.width; i ++)
+		freqA[canvasDataA1.data[(j * canvasDataA1.width + i) * 4]] ++;
+	max = Math.max(...freqA);
+	aA2.clearRect(0, 0, 256, 256);
+	aA2.fillStyle = "grey";
+	for (let i = 0; i < 256; i ++)
+		aA2.fillRect(i, 255 - freqA[i] / max * 255, 1, freqA[i] / max * 255);
+	// Histogram equalization
+	let fcml = [];
+	fcml.push(freq[0]);
+	for (let i = 1; i < 256; i ++)
+		fcml.push(fcml[i - 1] + freq[i]);
+	let mapping = [];
+	for (let i = 0; i < 256; i ++)
+		mapping.push(Math.round(255 * fcml[i] / (imgData.height * imgData.width)));
+	let canvasDataB1 = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+	for (let j = 0; j < canvasDataB1.height; j ++) {
+	for (let i = 0; i < canvasDataB1.width; i ++) {
+		let k = (j * canvasDataB1.width + i) * 4;
+		let newVal = mapping[imgData.data[k]];
+		canvasDataB1.data[k    ] = newVal;
+		canvasDataB1.data[k + 1] = newVal;
+		canvasDataB1.data[k + 2] = newVal;
+	}
+	}
+	aB1.putImageData(canvasDataB1, 0, 0);
+	let freqB = [];
+	for (let i = 0; i < 256; i ++)
+		freqB.push(0);
+	for (let j = 0; j < canvasDataB1.height; j ++)
+	for (let i = 0; i < canvasDataB1.width; i ++)
+		freqB[canvasDataB1.data[(j * canvasDataB1.width + i) * 4]] ++;
+	max = Math.max(...freqB);
+	aB2.clearRect(0, 0, 256, 256);
+	aB2.fillStyle = "grey";
+	for (let i = 0; i < 256; i ++)
+		aB2.fillRect(i, 255 - freqB[i] / max * 255, 1, freqB[i] / max * 255);
+	let fcmlB = [];
+	fcmlB.push(freqB[0]);
+	for (let i = 1; i < 256; i ++)
+		fcmlB.push(fcmlB[i - 1] + freqB[i]);
+	aB2.strokeStyle = "red";
+	aB2.beginPath();
+	aB2.moveTo(0, 255 - mapping[0]);
+	for (let i = 1; i < 256; i ++)
+		aB2.lineTo(i, 255 - mapping[i]);
+	aB2.stroke();
+	aB2.strokeStyle = "blue";
+	aB2.beginPath();
+	aB2.moveTo(0, 255 - fcmlB[0] / (canvasDataB1.height * canvasDataB1.width) * 255);
+	for (let i = 1; i < 256; i ++)
+		aB2.lineTo(i, 255 - fcmlB[i] / (canvasDataB1.height * canvasDataB1.width) * 255);
+	aB2.stroke();
+});
+	</script>
+</body>
+</html>
