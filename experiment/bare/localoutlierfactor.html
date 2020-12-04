@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Local Outlier Factor - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Local outlier factor calculator">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+noscript, .noscript {
+	background: #fff9c4;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: block;
+	padding: 4px;
+	margin: 8px;
+}
+
+noscript, .noscript, noscript *, .noscript * {
+	font: 12px sans-serif !important;
+}
+
+body {
+	font: 16px sans-serif;
+	margin: 0 auto 16px;
+	max-width: 800px;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+#form {
+	text-align: center;
+}
+
+#form>* {
+	display: inline-block;
+	margin: 0 16px;
+	max-width: calc(100% - 32px);
+	text-align: left;
+	width: 350px;
+}
+
+#form>textarea {
+	height: 250px;
+}
+
+#form label {
+	display: block;
+	margin: 4px auto;
+	max-width: 100%;
+	width: 350px;
+}
+
+#form label input[type=number] {
+	background: white;
+	border: 1px solid #e0e0e0;
+	float: right;
+	height: 16px;
+	width: 200px;
+}
+
+#form br {
+	display: block;
+	line-height: 4px;
+}
+
+#res {
+	font-family: monospace;
+	margin: 24px 0 0;
+}
+
+#res th, #res td {
+	padding: 0 8px;
+	text-align: right;
+}
+
+#res td:hover {
+	background: #fff9c4;
+}
+
+.pout {
+	color: red;
+}
+
+#c {
+	border: 1px solid black;
+	display: none;
+	height: 500px;
+	width: 500px;
+}
+
+.attrib {
+	font-size: 12px;
+	margin-left: 4em;
+	text-align: justify;
+	text-indent: -4em;
+}
+
+.italic {
+	font-style: italic;
+}
+
+#tooltip {
+	background: #fff9c4;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: none;
+	padding: 4px;
+	position: fixed;
+}
+
+@media (max-width: 832px) {
+	body {
+		margin: 0 8px;
+		width: calc(100% - 16px);
+	}
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Local Outlier Factor</h1>
+	<p>Local outlier factor (LOF) is an algorithm for finding anomalous data points by measuring the local deviation of a given data point with respect to its neighbours (Breunig et al., 2000).</p>
+	<noscript class="noscript">
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<div id="form">
+		<textarea id="raw">1  26  35
+2  13  12
+3  11  5
+4  10  15
+5  50  45
+6  200 200
+7  18  20
+8  21  14
+9  16  20
+10 21  75</textarea><!--
+		--><div>
+			<p>Input data in the text box with format:<br>&emsp;ID&emsp;x&emsp;y</p>
+			<label>Neighbour count: <input type="number" id="neighbour" min="1" value="3"></label><br>
+			<label>Threshold: <input type="number" id="thresh" min="0" value="2" step="0.1"></label><br>
+			<label><input type="checkbox" id="proxshow" checked> Show proximity matrix</label><br>
+			<label><input type="checkbox" id="knnshow" checked> Show nearest neighbours</label><br>
+			<label><input type="checkbox" id="avdenshow" checked> Show average density</label><br>
+			<label><input type="checkbox" id="avreldenshow" checked> Show average relative density</label><br>
+			<button id="btnCalc">Calculate</button>
+		</div>
+	</div>
+	<div id="res"></div>
+	<canvas id="c" width=500 height=500></canvas>
+	<hr>
+	<p class="attrib">Breunig, M. M.; Kriegel, H.-P.; Ng, R. T.; and Sander, J. (2000). LOF: Identifying Density-based Local Outliers. <span class="italic">Proceedings of the 2000 ACM SIGMOD International Conference on Management of Data (SIGMOD)</span>. pp. 93–104. doi:10.1145/335191.335388. ISBN 1-5811-3217-4.</p>	
+	<div id="tooltip"></div>
+	<script>
+var DATA = [];
+var a = undefined;
+var distSq = (A, B) => Math.pow(A[1] - B[1], 2) + Math.pow(A[2] - B[2], 2);
+var dist = (A, B) => Math.sqrt(distSq(A, B));
+var prox, avgDens, avgRelDens;
+const CSIZE = 500;
+const fixFrac = 2;
+function calc() {
+	res.innerHTML = "";
+	// data preparations
+	neighNum = neighbour.value;
+	thresVal = thresh.value;
+	DATA = raw.value.split("\n");
+	DATA.forEach((v, i, a) => {
+		a[i] = v.split(/\s+/g);
+		let p = String(a[i][0]);
+		a[i].forEach((v, i, a) => a[i] = Number(v));
+		a[i][0] = p;
+	});
+	let N = DATA.length;
+	// proximity matrix
+	prox = [];
+	for (let i = 0; i < N; i ++) {
+		prox.push([]);
+		for (let j = 0; j < N; j ++) {
+			prox[i].push([j, dist(DATA[i], DATA[j])]);
+		}
+	}
+	if (proxshow.checked) {
+		let pmat = "<b>Proximity matrix</b><table>";
+		pmat += "<tr><th>";
+		for (let i = 0; i < N; i ++)
+			pmat += "<th>" + DATA[i][0];
+		for (let i = 0; i < N; i ++) {
+			pmat += "<tr><th>" + DATA[i][0];
+			for (let j = 0; j < N; j ++) {
+				pmat += "<td onmouseover=\"t_dist(" + i + ", " + j + ")\"";
+				pmat += " onmouseout=\"t_clear()\">";
+				pmat += prox[i][j][1].toFixed(fixFrac);
+			}
+		}
+		pmat += "</table><br>";
+		res.innerHTML += pmat;
+	}
+	// sort proximity matrix by row to get nearest neighbours
+	prox.forEach((v, i, a) => a[i].sort((A, B) => A[1] - B[1]));
+	if (knnshow.checked) {
+		let nears = "<b>" + neighNum + "-nearest neighbours</b><table>";
+		for (let i = 0; i < N; i ++) {
+			nears += "<tr><th>" + DATA[i][0];
+			for (let j = 1; j <= neighNum; j ++) {
+				nears += "<td onmouseover=\"t_dist(" + i + ", " + prox[i][j][0] + ")\"";
+				nears += " onmouseout=\"t_clear()\">";
+				nears += "<b>" + DATA[prox[i][j][0]][0] + "</b><br>" + prox[i][j][1].toFixed(fixFrac);
+			}
+		}
+		nears += "</table><br>";
+		res.innerHTML += nears;
+	}
+	// average density
+	avgDens = [];
+	for (let i = 0; i < N; i ++) {
+		let sum_ = 0;
+		for (let j = 1; j <= neighNum; j ++)
+			sum_ += prox[i][j][1];
+		avgDens.push(neighNum / sum_);
+	}
+	if (avdenshow.checked) {
+		let avden = "<b>Average density</b><table>";
+		for (let i = 0; i < N; i ++) {
+			avden += "<tr><th>" + DATA[i][0];
+			avden += "<td onmouseover=\"t_avgDens(" + i + ")\"";
+			avden += " onmouseout=\"t_clear()\">";
+			avden += avgDens[i].toFixed(fixFrac);
+		}
+		avden += "</table><br>";
+		res.innerHTML += avden;
+	}
+	// average relative density
+	avgRelDens = [];
+	for (let i = 0; i < N; i ++) {
+		let sum_ = 0;
+		for (let j = 1; j <= neighNum; j ++)
+			sum_ += avgDens[prox[i][j][0]];
+		avgRelDens.push(sum_ / neighNum / avgDens[i]);
+	}
+	if (avreldenshow.checked) {
+		let avrelden = "<b>Average relative density</b><table>";
+		for (let i = 0; i < N; i ++) {
+			avrelden += "<tr><th>" + DATA[i][0];
+			avrelden += "<td " + (avgRelDens[i] > thresVal ? "class=\"pout\"" : "");
+			avrelden += " onmouseover=\"t_avgRelDens(" + i + ")\"";
+			avrelden += " onmouseout=\"t_clear()\">";
+			avrelden += avgRelDens[i].toFixed(fixFrac);
+		}
+		avrelden += "</table><br>";
+		res.innerHTML += avrelden;
+	}
+	// outliers
+	let outliers = "<b>Outliers</b><table>";
+	outliers += "<tr><th>ID<th>x<th>y";
+	for (let i = 0; i < N; i ++) {
+		if (avgRelDens[i] <= thresVal)
+			continue;
+		outliers += "<tr><th>" + DATA[i][0];
+		outliers += "<td>" + DATA[i][1];
+		outliers += "<td>" + DATA[i][2];
+	}
+	outliers += "</table><br>";
+	res.innerHTML += outliers;
+	// plot graph
+	let xMin = DATA[0][1];
+	let xMax = DATA[0][1];
+	let yMin = DATA[0][1];
+	let yMax = DATA[0][2];
+	for (let i = 1; i < N; i ++) {
+		if (DATA[i][1] < xMin) xMin = DATA[i][1];
+		if (DATA[i][1] > xMax) xMax = DATA[i][1];
+		if (DATA[i][2] < yMin) yMin = DATA[i][2];
+		if (DATA[i][2] > yMax) yMax = DATA[i][2];
+	}
+	let scale = Math.max(xMax - xMin, yMax - yMin);
+	a.clearRect(0, 0, CSIZE, CSIZE);
+	let ox = (-xMin / scale * .8 + .1) * CSIZE;
+	let oy = (-yMin / scale * .8 + .1) * CSIZE;
+	oy = CSIZE - oy;
+	a.strokeStyle = "black";
+	a.beginPath();
+	a.moveTo(ox, 0);
+	a.lineTo(ox, CSIZE);
+	a.stroke();
+	a.beginPath();
+	a.moveTo(0, oy);
+	a.lineTo(CSIZE, oy);
+	a.stroke();
+	a.font = "12px sans-serif";
+	for (let i = 0; i < N; i ++) {
+		let px = ((DATA[i][1] - xMin) / scale * .8 + .1) * CSIZE;
+		let py = ((DATA[i][2] - yMin) / scale * .8 + .1) * CSIZE;
+		py = CSIZE - py;
+		a.fillStyle = avgRelDens[i] > thresVal ? "red" : "black";
+		a.fillRect(px, py, 2, 2);
+		a.fillText(DATA[i][0], px, py);
+	}
+	c.style.display = "block";
+}
+// tooltips
+t_clear = () => {
+	tooltip.style.display = "none";
+	tooltip.innerHTML = "";
+};
+t_dist = (i, j) => {
+	let ii = DATA[i][0];
+	let xi = DATA[i][1];
+	let yi = DATA[i][2];
+	let ij = DATA[j][0];
+	let xj = DATA[j][1];
+	let yj = DATA[j][2];
+	tooltip.innerHTML = "distance<br>"
+	tooltip.innerHTML += "= sqrt((x<sub>" + ii + "</sub> - x<sub>" + ij + "</sub>)<sup>2</sup> + (y<sub>" + ii + "</sub> - y<sub>" + ij + "</sub>)<sup>2</sup>)<br>";
+	tooltip.innerHTML += "= sqrt((" + xi + " - " + xj + ")<sup>2</sup> + (" + yi + " - " + yj + ")<sup>2</sup>)";
+	tooltip.style.display = "block";
+};
+t_avgDens = (i) => {
+	let sums = "";
+	let sum2 = "";
+	for (let j = 1; j <= neighNum; j ++) {
+		sums += "dist(" + DATA[i][0] + ", " + DATA[prox[i][j][0]][0] + ")";
+		sum2 += prox[i][j][1].toFixed(fixFrac);
+		if (j < neighNum) {
+			sums += " + ";
+			sum2 += " + ";
+		}
+	}
+	tooltip.innerHTML = "average density<br>";
+	tooltip.innerHTML += "= neighbour count / (" + sums + ")<br>";
+	tooltip.innerHTML += "= " + neighNum + " / (" + sum2 + ")";
+	tooltip.style.display = "block";
+};
+t_avgRelDens = (i) => {
+	let sums = "";
+	let sum2 = "";
+	for (let j = 1; j <= neighNum; j ++) {
+		sums += "avg<sub>" + DATA[prox[i][j][0]][0] + "</sub>";
+		sum2 += avgDens[prox[i][j][0]].toFixed(fixFrac);
+		if (j < neighNum) {
+			sums += " + ";
+			sum2 += " + ";
+		}
+	}
+	tooltip.innerHTML = "average relative density<br>";
+	tooltip.innerHTML += "= (" + sums + ") / neighbour count / avg<sub>" + DATA[i][0] + "</sub><br>";
+	tooltip.innerHTML += "= (" + sum2 + ") / " + neighNum + " / " + avgDens[i].toFixed(fixFrac);
+	tooltip.style.display = "block";
+};
+document.addEventListener("mousemove", (ev) => {
+	if (ev.clientX <= window.innerWidth / 2) {
+		tooltip.style.left = (ev.clientX + 16) + "px";
+		tooltip.style.right = "";
+	} else {
+		tooltip.style.left = "";
+		tooltip.style.right = (window.innerWidth - ev.clientX) + "px";
+	}
+	if (ev.clientY <= window.innerHeight / 2) {
+		tooltip.style.top = ev.clientY + "px";
+		tooltip.style.bottom = "";
+	} else {
+		tooltip.style.top = "";
+		tooltip.style.bottom = (window.innerHeight - ev.clientY) + "px";
+	}
+});
+btnCalc.addEventListener("click", () => { calc(); });
+window.addEventListener("load", () => { a = c.getContext("2d"); });
+	</script>
+</body>
+</html>
