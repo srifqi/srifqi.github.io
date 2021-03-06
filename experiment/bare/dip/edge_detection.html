@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
 	<title>Point and Edge Detection - Experiments - srifqi</title>
 	<meta charset="utf-8">
@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	<style>
 noscript, .noscript {
-	background: #fff9cC2;
+	background: #fff9c4;
 	border: 4px solid #fff176;
 	border-radius: 4px;
 	display: block;
@@ -88,9 +88,9 @@ body.mathml .eq-image {
 	<h2>Point Detection</h2>
 		<p>Below is an example of point detection.</p>
 		<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>8</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-		<p class="equation eq-image"><img src="edge_detection-eq-1.png" height=75 style="height: 75px;"></p>
+		<p class="equation eq-image"><img src="edge_detection-eq-1.png" alt="Kernel for point detection" width=119 height=94 style="height: 75px; width: auto;"></p>
 		<div class="figures">
-			<img id=imgA src="valve.png">
+			<img id=imgA src="valve.png" alt="Original image" width=256 height=256>
 			<canvas id=cA width=256 height=256></canvas>
 		</div>
 	</article>
@@ -104,19 +104,19 @@ body.mathml .eq-image {
 				<div class="figure">
 					<b>Horizontal</b><br>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-2</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-2.png" height=75 style="height: 75px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-2.png" alt="Kernel for horizontal Sobel filter" width=107 height=94 style="height: 75px; width: auto;"></p>
 					<canvas id=cB width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>Vertical</b>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-2</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-3.png" height=75 style="height: 75px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-3.png" alt="Kernel for vertical Sobel filter" width=119 height=94 style="height: 75px; width: auto;"></p>
 					<canvas id=cC width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>Magnitude</b><br>
 					<p class="equation eq-mathml" style="height: 75px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
-					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" alt="Magnitude formula" width=82 height=28 style="height: 22px; width: auto;"></p>
 					<canvas id=cD width=256 height=256></canvas>
 				</div>
 			</div>
@@ -128,19 +128,19 @@ body.mathml .eq-image {
 				<div class="figure">
 					<b>Horizontal</b><br>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-5.png" height=75 style="height: 75px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-5.png" alt="Kernel for horizontal Prewitt filter" width=107 height=94 style="height: 75px; width: auto;"></p>
 					<canvas id=cE width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>Vertical</b>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-6.png" height=75 style="height: 75px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-6.png" alt="Kernel for vertical Prewitt filter" width=119 height=94 style="height: 75px; width: auto;"></p>
 					<canvas id=cF width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>Magnitude</b><br>
 					<p class="equation eq-mathml" style="height: 75px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
-					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" alt="Magnitude formula" width=82 height=28 style="height: 22px; width: auto;"></p>
 					<canvas id=cG width=256 height=256></canvas>
 				</div>
 			</div>
@@ -152,19 +152,19 @@ body.mathml .eq-image {
 				<div class="figure">
 					<b>45 degrees</b><br>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>-1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-7.png" height=75 style="height: 54px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-7.png" alt="Kernel for 45 degrees Roberts filter" width=76 height=67 style="height: 54px; width: auto;"></p>
 					<canvas id=cH width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>135 degrees</b>
 					<p class="equation eq-mathml"><math><mrow><mo>(</mo><mtable><mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>-1</mn></mtd><mtd><mn>0</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-					<p class="equation eq-image"><img src="edge_detection-eq-8.png" height=75 style="height: 54px;"></p>
+					<p class="equation eq-image"><img src="edge_detection-eq-8.png" alt="Kernel for 135 degrees Roberts filter" width=76 height=67 style="height: 54px; width: auto;"></p>
 					<canvas id=cI width=256 height=256></canvas>
 				</div>
 				<div class="figure">
 					<b>Magnitude</b><br>
 					<p class="equation eq-mathml" style="height: 54px;"><math><msqrt><msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt></math></p>
-					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" height=22 style="height: 22px;"></p>
+					<p class="equation eq-image" style="height: 75px;"><img src="edge_detection-eq-4.png" alt="Magnitude formula" width=82 height=28 style="height: 22px; width: auto;"></p>
 					<canvas id=cJ width=256 height=256></canvas>
 				</div>
 			</div>

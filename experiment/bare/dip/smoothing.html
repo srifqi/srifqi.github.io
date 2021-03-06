@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
 	<title>Image Smoothing - Experiments - srifqi</title>
 	<meta charset="utf-8">
@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	<style>
 noscript, .noscript {
-	background: #fff9cC2;
+	background: #fff9c4;
 	border: 4px solid #fff176;
 	border-radius: 4px;
 	display: block;
@@ -85,9 +85,9 @@ body.mathml .eq-image {
 		<h2>Mean/Box Filter</h2>
 		<p>Below is an example of mean filter (box filter).</p>
 		<p class="equation eq-mathml"><math><mfrac><mn>1</mn><mn>9</mn></mfrac> <mrow><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-		<p class="equation eq-image"><img src="smoothing-eq-1.png" height=75 style="height: 75px;"></p>
+		<p class="equation eq-image"><img src="smoothing-eq-1.png" alt="Matrix equation for mean/box filter" width=114 height=94 style="height: 75px; width: auto;"></p>
 		<div class="figures">
-			<img id=imgA src="noisy-photo.png">
+			<img id=imgA src="noisy-photo.png" alt="Noisy photo" width=256 height=256>
 			<canvas id=cA width=256 height=256></canvas>
 		</div>
 	</article>
@@ -95,9 +95,9 @@ body.mathml .eq-image {
 		<h2>Gaussian blur</h2>
 		<p>Below is an example of Gaussian blur with <math><mn>σ</mn> <mo>=</mo> 1</math>.</p>
 		<p class="equation eq-mathml"><math><mfrac><mn>1</mn><mn>4.8976</mn></mfrac> <mrow><mo>(</mo><mtable><mtr><mtd><mn>0.3679</mn></mtd><mtd><mn>0.6065</mn></mtd><mtd><mn>0.3679</mn></mtd></mtr><mtr><mtd><mn>0.6065</mn></mtd><mtd><mn>1.0000</mn></mtd><mtd><mn>0.6065</mn></mtd></mtr><mtr><mtd><mn>0.3679</mn></mtd><mtd><mn>0.6065</mn></mtd><mtd><mn>0.3679</mn></mtd></mtr></mtable><mo>)</mo></mrow></math></p>
-		<p class="equation eq-image"><img src="smoothing-eq-2.png" height=75 style="height: 75px;"></p>
+		<p class="equation eq-image"><img src="smoothing-eq-2.png" alt="Matrix equation for Gaussian filter" width=295 height=94 style="height: 75px; width: auto;"></p>
 		<div class="figures">
-			<img id=imgB src="noisy-photo.png">
+			<img id=imgB src="noisy-photo.png" alt="Noisy photo" width=256 height=256>
 			<canvas id=cB width=256 height=256></canvas>
 		</div>
 	</article>
@@ -105,7 +105,7 @@ body.mathml .eq-image {
 		<h2>Median filter</h2>
 		<p>Below is an example of median filter. Median filter works best for salt-and-pepper noises.</p>
 		<div class="figures">
-			<img id=imgC src="salt-and-pepper.png">
+			<img id=imgC src="salt-and-pepper.png" alt="Image with salt-and-pepper noise" width=256 height=256>
 			<canvas id=cC width=256 height=256></canvas>
 		</div>
 	</article>

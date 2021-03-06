@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
 	<title>Local Outlier Factor - Experiments - srifqi</title>
 	<meta charset="utf-8">
@@ -44,8 +44,9 @@ h1 {
 	width: 350px;
 }
 
-#form>textarea {
-	height: 250px;
+#form>div>textarea {
+	height: 225px;
+	width: 100%;
 }
 
 #form label {
@@ -64,7 +65,9 @@ h1 {
 }
 
 #form br {
+	content: " ";
 	display: block;
+	height: 4px;
 	line-height: 4px;
 }
 
@@ -130,7 +133,9 @@ h1 {
 		instructions how to enable JavaScript in your web browser</a>.
 	</noscript>
 	<div id="form">
-		<textarea id="raw">1  26  35
+		<div>
+			<label for="raw">Raw data</label>
+			<textarea id="raw">1  26  35
 2  13  12
 3  11  5
 4  10  15
@@ -139,7 +144,8 @@ h1 {
 7  18  20
 8  21  14
 9  16  20
-10 21  75</textarea><!--
+10 21  75</textarea>
+		</div><!--
 		--><div>
 			<p>Input data in the text box with format:<br>&emsp;ID&emsp;x&emsp;y</p>
 			<label>Neighbour count: <input type="number" id="neighbour" min="1" value="3"></label><br>

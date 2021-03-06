@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
 	<title>Greyscale Transformation - Experiments - srifqi</title>
 	<meta charset="utf-8">
@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	<style>
 noscript, .noscript {
-	background: #fff9cC2;
+	background: #fff9c4;
 	border: 4px solid #fff176;
 	border-radius: 4px;
 	display: block;
@@ -84,7 +84,7 @@ msup>*:nth-child(2) {
 		<h2>Negative transformation</h2>
 		<p>Below is an example of negative transformation (invert color), i.e. <math><mi>T</mi><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow> <mo>=</mo> <mrow><mn>1</mn> <mo>-</mo> <mi>x</mi></mrow></math> where <math><mi>x</mi> <mo>∈</mo> <mrow><mo>[</mo><mn>0</mn><mo>,</mo> <mn>1</mn><mo>]</mo></mrow></math>.</p>
 		<div class="figures">
-			<img id=imgA src="torii.png">
+			<img id=imgA src="torii.png" alt="Original image" width=256 height=256>
 			<canvas id=cA width=256 height=256></canvas>
 		</div>
 	</article>
@@ -92,10 +92,10 @@ msup>*:nth-child(2) {
 		<h2>Logarithmic transformation</h2>
 		<p>Below is an example of logarithmic transformation. It uses <math><mi>T</mi><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow> <mo>=</mo> <mrow><mi>c</mi> <msub><mi>log</mi><mn>2</mn></msub><mrow><mo>(</mo><mn>1</mn> <mo>+</mo> <mi>x</mi><mo>)</mo></mrow></mrow></math> where <math><mi>c</mi></math> is the value of slider below and <math><mi>x</mi> <mo>∈</mo> <mrow><mo>[</mo><mn>0</mn><mo>,</mo> <mn>1</mn><mo>]</mo></mrow></math>.</p>
 		<div class="figures">
-			<img id=imgB src="torii.png">
+			<img id=imgB src="torii.png" alt="Original image" width=256 height=256>
 			<canvas id=cB1 width=256 height=256></canvas>
 			<canvas id=cB2 width=256 height=256></canvas>
-			<pre id=coutB>0</pre>
+			<pre><label id=coutB for=sliderA>k = 1</label></pre>
 			<input id=sliderA type="range" min=0 max=2 value=1 step=0.001>
 		</div>
 	</article>
@@ -103,10 +103,10 @@ msup>*:nth-child(2) {
 		<h2>Power-law transformation</h2>
 		<p>Below is an example of power-law (gamma) transformation. It uses <math><mi>T</mi><mrow><mo>(</mo><mi>x</mi><mo>)</mo></mrow> <mo>=</mo> <msup><mi>x</mi><mi>k</mi></msup></math> where <math><mi>k</mi></math> is the value of slider below and <math><mi>x</mi> <mo>∈</mo> <mrow><mo>[</mo><mn>0</mn><mo>,</mo> <mn>1</mn><mo>]</mo></mrow></math>.</p>
 		<div class="figures">
-			<img id=imgC src="torii.png">
+			<img id=imgC src="torii.png" alt="Original image" width=256 height=256>
 			<canvas id=cC1 width=256 height=256></canvas>
 			<canvas id=cC2 width=256 height=256></canvas>
-			<pre id=coutC>0</pre>
+			<pre><label id=coutC for=sliderB>k = 1</label></pre>
 			<input id=sliderB type="range" min=-1024 max=1024 value=0>
 		</div>
 	</article>
@@ -148,7 +148,7 @@ const clamp = (v) => Math.min(Math.max(v, 0), 255);
 const logarithmic = (v, c) => c * Math.log2(1 + v / 255) * 255;
 function drawA(val) {
 	let multiplier = val;
-	coutB.innerText = multiplier;
+	coutB.innerText = "k = " + multiplier;
 	let canvasData = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
 	let freq = new Array(256); for (let i = 0; i < 256; i ++) freq[i] = 0;
 	for (let j = 0; j < canvasData.height; j ++) {
@@ -178,7 +178,7 @@ const k1 = 1 / 1024 / 1024;
 const powerlaw = (v, e) => Math.pow(v / 255, e) * 255;
 function drawB(val) {
 	let exponent = Math.pow(10, val * val * Math.sign(val) * k1);
-	coutC.innerText = exponent;
+	coutC.innerText = "k = " + exponent;
 	let canvasData = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
 	let freq = new Array(256); for (let i = 0; i < 256; i ++) freq[i] = 0;
 	for (let j = 0; j < canvasData.height; j ++) {
