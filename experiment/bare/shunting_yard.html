@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<title>Shunting Yard Algorithm - Experiments - srifqi</title>
+	<meta charset="utf-8">
+	<meta name="author" content="srifqi">
+	<meta name="description" content="Shunting yard algorithm visualizer">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+	<style>
+noscript, .noscript {
+	background: #fff9c4;
+	border: 4px solid #fff176;
+	border-radius: 4px;
+	display: block;
+	padding: 4px;
+	margin: 8px;
+}
+
+noscript, .noscript, noscript *, .noscript * {
+	font: 12px sans-serif !important;
+}
+
+body {
+	font: 16px sans-serif;
+	margin: 0 auto 16px;
+	max-width: 800px;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+}
+
+#form, #control {
+	display: flex;
+	margin: 8px 0;
+	justify-content: center;
+}
+
+#form button, #control button {
+	margin: 0 8px;
+}
+
+#form input[type=text] {
+	flex-grow: 0.5;
+}
+
+#scroll-helper {
+	display: none;
+	font-size: smaller;
+	font-style: italic;
+	text-align: center;
+}
+
+#visualizer {
+	overflow-x: auto;
+	text-align: center;
+}
+
+#caption {
+	text-align: center;
+}
+
+code {
+	background: white;
+	border: 1px outset #aaa;
+	border-radius: 4px;
+	font-size: 12px;
+	padding: 0 6px;
+}
+
+@media (max-width: 832px) {
+	body {
+		margin: 0 8px;
+		width: calc(100% - 16px);
+	}
+
+	#scroll-helper {
+		display: block;
+	}
+}
+	</style>
+</head>
+<body>
+	<h1 id="title">Shunting Yard Algorithm</h1>
+	<p>Shunting yard algorithm is one of the methods for parsing mathematical expressiong in infix notation and producing a postfix notation string, also known as reverse Polish notation (RPN).</p>
+	<p>Only <code>+</code>, <code>−</code>, <code>×</code>, <code>÷</code>, and <code>^</code> operators are supported. Negative numbers are <b>not</b> supported yet! You can also use <code>*</code>, <code>/</code>, and <code>**</code> as <code>×</code>, <code>÷</code>, and <code>^</code> respectively.</p>
+	<noscript class="noscript">
+		For full functionality of this site, it is necessary to enable JavaScript.
+		Here are the <a href="https://www.enable-javascript.com/" target="_blank">
+		instructions how to enable JavaScript in your web browser</a>.
+	</noscript>
+	<div id="form">
+		<input type="text" id="expr" placeholder="Expression in infix notation" value="2−(5×8÷4)+3^2">
+		<button type="button" id="btnVisualize">Visualize</button>
+	</div>
+	<div id="scroll-helper"><p>Scroll left or right the window below to see the whole rail network.</p></div>
+	<div id="control" style="display: none;">
+		<button type="button" id="btnNext">Next</button>
+		<button type="button" id="btnReset">Reset</button>
+	</div>
+	<div id="visualizer">
+		<canvas id="c"></canvas>
+	</div>
+	<div id="captions">
+		<p id="caption"></p>
+	</div>
+	<script>
+var W = 720;
+var H = 200;
+c.style.width = W + "px";
+c.style.height = H + "px";
+c.width = W;
+c.height = H;
+var a = c.getContext("2d");
+var tokenList = [];
+var opStack = [];
+var outputs = [];
+var sidingToken = false;
+var draw = function () {
+	// background
+	a.fillStyle = "black";
+	a.fillRect(0, 0, W, H);
+	// text formats
+	a.fillStyle = "white";
+	a.textAlign = "center";
+	a.textBaseline = "middle";
+	a.font = "14px sans-serif";
+	// rails
+	a.strokeStyle = "white";
+	a.lineWidth = 4;
+	a.beginPath();
+	a.moveTo(8, H / 8);
+	a.lineTo(W - 8, H / 8);
+	a.stroke();
+	a.beginPath();
+	a.moveTo(W / 2, H / 8);
+	a.lineTo(W / 2, H * 7 / 8);
+	a.stroke();
+	// boxes
+	var size = 16 + 4;
+	for (var i = tokenList.length - 1; i >= 0; i --) {
+		var symbol = tokenList[tokenList.length - i - 1];
+		drawBox(symbol, W - 16 - i * size, H / 8);
+	}
+	for (var i = 0; i < opStack.length; i ++) {
+		drawBox(opStack[i], W / 2, H * 7 / 8 - 16 - i * size);
+	}
+	for (var i = 0; i < outputs.length; i ++) {
+		drawBox(outputs[i], 16 + i * size, H / 8);
+	}
+	if (sidingToken !== false) {
+		drawBox(sidingToken, W / 2 + 16, H / 8);
+	}
+};
+var drawBox = function(symbol, x, y) {
+	var size = 16;
+	a.fillStyle = "#222";
+	a.strokeStyle = "white";
+	a.lineWidth = 2;
+	a.fillRect(x - size / 2, y - size / 2, size, size);
+	a.strokeRect(x - size / 2, y - size / 2, size, size);
+	a.fillStyle = "white";
+	a.fillText(symbol, x, y);
+};
+var parseInput = function() {
+	tokenList = expr.value
+		.replaceAll(/[*][*]/g, "^") // exponentiation sign
+		.replaceAll(/[*×]/g, "×") // multiplication sign
+		.replaceAll(/[/÷]/g, "÷") // division sign
+		.replaceAll(/[-−]/g, "−") // minus sign
+		.replaceAll(/(\d|[−+÷×^()])([−+÷×^()])/g, "$1 $2") // 1+ 2
+		.replaceAll(/([−+÷×^()])(\d|[−+÷×^()])/g, "$1 $2") // 1 +2
+		.replaceAll(/(\d|[−+÷×^()])([−+÷×^()])/g, "$1 $2") // 1+ 2
+		.replaceAll(/([−+÷×^()])(\d|[−+÷×^()])/g, "$1 $2") // 1 +2
+		.split(/\s+/);
+	opStack = [];
+	outputs = [];
+	draw();
+	form.style.display = "none";
+	control.style.display = "";
+	btnNext.disabled = "";
+	caption.innerHTML = "";
+};
+var priority = {
+	"+": 1,
+	"−": 1,
+	"×": 2,
+	"÷": 2,
+	"^": 3
+};
+var associativity = {
+	"+": "left",
+	"−": "left",
+	"×": "left",
+	"÷": "left",
+	"^": "right"
+};
+// https://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/
+var inWhichWhile = false;
+var nextStep = function() {
+	if (inWhichWhile == "while parenthesis") { // 3.
+		if (opStack.length > 0 && opStack[opStack.length - 1] != "(") {
+			var top = opStack.pop();
+			outputs.push(top);
+			caption.innerHTML = "Move operator <code>" + top + "</code> into the output.";
+		} else {
+			opStack.pop();
+			inWhichWhile = false;
+			caption.innerHTML = "Drop <code>(</code>.";
+		}
+		draw();
+		return;
+	}
+	if (inWhichWhile == "while operators") { // operators / 4., 5., 6.
+		var top = opStack[opStack.length - 1];
+		if ( // 6.
+			opStack.length > 0 &&
+			// These comparisons below with undefined resulting false.
+			(
+				priority[sidingToken] < priority[top] ||
+				(priority[sidingToken] == priority[top] && associativity[sidingToken] == "left")
+			)
+		) {
+			var top = opStack.pop();
+			outputs.push(top);
+			if (priority[sidingToken] < priority[top]) {
+				caption.innerHTML = "Because the incoming <code>" + sidingToken + "</code> has lower precedence than <code>" + top + "</code> on top of the operator stack, move operator <code>" + top + "</code> into the output.";
+			} else if (priority[sidingToken] == priority[top] && associativity[sidingToken] == "left") {
+				caption.innerHTML = "Because the incoming <code>" + sidingToken + "</code> has the same precedence with <code>" + top + "</code> on top of the operator stack and its associativity is left, move operator <code>" + top + "</code> into the output.";
+			}
+		} else {
+			opStack.push(sidingToken);
+			inWhichWhile = false;
+			caption.innerHTML = "Move operator <code>" + sidingToken + "</code> into the operator stack.";
+			sidingToken = false;
+		}
+		draw();
+		return;
+	}
+	var token = tokenList.shift();
+	if (token == "(") { // 2.
+		opStack.push(token);
+		caption.innerHTML = "Move <code>(</code> into the operator stack.";
+	} else if (token == ")") { // 3.
+		inWhichWhile = "while parenthesis";
+		caption.innerHTML = "Drop <code>)</code>. Will move operators from top until <code>(</code> is the top in the operator stack into the output."
+	} else if (priority.hasOwnProperty(token)) { // operators / 4., 5., 6.
+		sidingToken = token;
+		inWhichWhile = "while operators";
+		nextStep();
+	} else if (typeof token != "undefined") { // numbers
+		outputs.push(token); // 1.
+		caption.innerHTML = "Move number <code>" + token + "</code> into the output.";
+	} else {
+		if (opStack.length > 0) { // 7.
+			var top = opStack.pop();
+			outputs.push(top);
+			caption.innerHTML = "Move operator <code>" + top + "</code> into the output.";
+			if (opStack.length == 0) {
+				btnNext.disabled = "disabled";
+			}
+		} else {
+			// No actions.
+		}
+	}
+	draw();
+};
+var resetVisualizer = function() {
+	tokenList = [];
+	opStack = [];
+	outputs = [];
+	draw();
+	form.style.display = "";
+	control.style.display = "none";
+	caption.innerHTML = "";
+};
+draw();
+btnVisualize.addEventListener("click", () => { parseInput(); });
+btnNext.addEventListener("click", () => { nextStep(); });
+btnReset.addEventListener("click", () => { resetVisualizer(); });
+	</script>
+</body>
+</html>
